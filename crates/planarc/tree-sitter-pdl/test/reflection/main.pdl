@@ -1,0 +1,57 @@
+
+import pdl
+
+node NodeDef {
+    match #"..."# {
+        @node_decl {
+            set doc = include_str! "./docs/node_def"
+        }
+        @node_name {
+            check pdl.lint.is_pascal_case @node_name
+            check pdl.lint.check_duplicate_node @node_name
+        }
+    }
+}
+
+node MatchBlock {
+    match #"..."# {
+        @q {
+            check pdl.lint.validateTsQuery @q
+        }
+    }
+}
+
+node Keyword {
+    match #"..."# {
+        @keyword {
+            doc pdl.showDocForKeyword @keyword
+        }
+    }
+}
+
+node Import {
+    match #"..."# {
+        global <- pdl.getEntryFile @module-path
+    }
+}
+
+query QueryDefPattern = `
+    (query_definition
+        name: (identifier) @query_name
+        value: (query_literal
+            (raw_content) @query_body
+        )
+    ) @query_def
+`
+
+node QueryDefinition {
+    match QueryDefPattern {
+        @query_name {
+            check pdl.lint.isPascalCase @query_name
+        }
+
+        @query_body {
+            check pdl.lint.validateTsQuery @query_body
+        }
+    }
+}

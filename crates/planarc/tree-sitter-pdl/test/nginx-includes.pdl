@@ -1,0 +1,22 @@
+schema "nginx" grammar="nginx"
+
+import std.fs 
+
+query IncludePattern = `
+(directive
+    (keyword) @kw
+    (#eq? @kw "include")
+    [(file) (mask)] @path
+)
+`
+
+
+
+node IncludeDirective {
+    match IncludePattern {
+        @path {
+
+            global -> std.fs.resolve_glob $CURRENT_FILE @path.text
+        }
+    }
+}

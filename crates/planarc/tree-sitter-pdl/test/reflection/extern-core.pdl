@@ -1,0 +1,37 @@
+extern core {
+    operator / :: left: String, right: String -> String
+
+    operator . :: left: String, right: String -> String
+
+    operator <-> :: left: Node, right: Node -> Void
+
+    operator -> :: left: Node, right: Node -> Void
+
+    operator <- :: left: Node, right: Node -> Void
+
+    operator <- :: left: Node, right: Node -> Void
+
+    operator ~ :: left: Node, right: Query -> Void
+}
+
+extern pdl {
+    showDocByKeyword :: keyword: Node -> String
+
+    getEntryFile :: path: Node -> Node
+}
+
+extern pdl.lint {
+    /// is PascalCase?
+    isPascalCase :: name: String -> Diagnostic?
+
+    /// is camel_case?
+    isCamelCase :: name: String -> Diagnostic?
+
+    checkDuplicateNode :: name: String -> Diagnostic?
+
+    validateGrammarName :: name: String -> Diagnostic?
+    
+    validateTsQuery :: query: String -> Diagnostic? 
+
+    file_exists :: name: String -> Diagnostic?
+}

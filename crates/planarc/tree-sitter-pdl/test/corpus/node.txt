@@ -1,0 +1,220 @@
+==================
+Schema Header
+==================
+schema "docker-compose" grammar="yaml"
+
+---
+(source_file
+  header: (header
+    name: (string)
+    grammar_ref: (string)))
+
+==================
+Node with multiple definitions
+==================
+
+node Service1 {}
+node Service2 {}
+
+---
+
+(source_file
+  (node_definition
+    kind: (fqmn)
+    (block))
+  (node_definition
+    kind: (fqmn)
+    (block))
+)
+
+==================
+Match Statement
+==================
+node Test {
+  match `(key) @k` {}
+}
+
+---
+
+(source_file
+  (node_definition
+    kind: (fqmn)
+    (block
+      (match_stmt
+        query: (raw_string)
+        (match_block)))))
+
+==================
+Extern Declaration
+==================
+
+extern std.lint {
+  isPascalCase :: name: String -> Diagnostic?
+
+  validateGrammarName :: name: String -> Diagnostic?
+
+  operator / :: left: String, right: String -> String
+}
+
+---
+(source_file
+  (extern_definition
+    (fqmn)
+    (extern_block
+      (extern_def_fn
+        (identifier)
+        (extern_def_arg
+          (identifier)
+          (identifier))
+        (extern_return
+          (identifier)))
+      (extern_def_fn
+        (identifier)
+        (extern_def_arg
+          (identifier)
+          (identifier))
+        (extern_return
+          (identifier)))
+      (extern_def_fn
+        (operator_identifier)
+        (extern_def_arg
+          (identifier)
+          (identifier))
+        (extern_def_arg
+          (identifier)
+          (identifier))
+        (extern_return
+          (identifier))))))
+
+==================
+Extern Declaration Core
+==================
+
+extern core {
+  operator / :: left: String, right: String -> String
+}
+
+
+---
+(source_file
+  (extern_definition
+    (fqmn)
+    (extern_block
+      (extern_def_fn
+        (operator_identifier)
+        (extern_def_arg
+          (identifier)
+          (identifier))
+        (extern_def_arg
+          (identifier)
+          (identifier))
+        (extern_return
+          (identifier))))))
+
+
+==================
+Import Declaration
+==================
+
+import std.lint
+
+---
+(source_file
+  (import_definition
+    (fqmn)))
+
+==================
+Query Declaration
+==================
+
+query QueryDefPattern = `
+    (query_definition
+        name: (identifier) @query_name
+        value: (query_literal
+            (raw_content) @query_body
+        )
+    ) @query_def
+`
+
+---
+(source_file
+  (query_definition
+    (identifier)
+    (query_literal
+      (raw_content))))
+
+==================
+Nginx hello world
+==================
+
+schema "nginx" grammar="nginx"
+
+import std.fs 
+
+query IncludePattern = `include (string)@path;`
+
+node IncludeDirective {
+  match IncludePattern {
+    @path {
+      global -> std.fs.resolve_glob $CURRENT_FILE @path.text
+    }
+  }
+}
+
+---
+(source_file
+  (header
+    (string)
+    (string))
+  (import_definition
+    (fqmn))
+  (query_definition
+    (identifier)
+    (query_literal
+      (raw_content)))
+  (node_definition
+    (fqmn)
+    (block
+      (match_stmt
+        (identifier)
+        (match_block
+          (capture
+            (variable)
+            (capture_block
+              (graph_bind
+                (graph_left_statements
+                  (identifier))
+                (graph_right_statements
+                  (call_func
+                    (fqmn)
+                    (variable)
+                    (variable
+                      (property_access))))))))))))
+
+==================
+Fact Declaration
+==================
+
+fact Node {
+  text String
+  start_byte Int
+  end_byte Int
+  file_path String
+}
+
+---
+(source_file
+  (fact_defintion
+    (identifier)
+    (fact_field_definition
+      (identifier)
+      (identifier))
+    (fact_field_definition
+      (identifier)
+      (identifier))
+    (fact_field_definition
+      (identifier)
+      (identifier))
+    (fact_field_definition
+      (identifier)
+      (identifier))))

@@ -4,3 +4,10 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+tree-sitter = "0.26.3"
+sha2 = "0.10"
+hex = "0.4"
+xxhash-rust = { version = "0.8", features = ["xxh3"] }
+
+[dev-dependencies]
+tree-sitter-rust = "0.24.0"

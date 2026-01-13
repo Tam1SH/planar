@@ -1,0 +1,15 @@
+[package]
+name = "planarc"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+dirs = { workspace = true }
+libloading = "0.9.0"
+tree-sitter = { workspace = true }
+anyhow = { workspace = true }
+insta = { workspace = true }
+tree-sitter-planardl = { path = "tree-sitter-pdl/" }
+
+[build-dependencies]
+cc = "1.0"
