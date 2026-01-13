@@ -1,0 +1,13 @@
+[workspace]
+resolver = "2"
+members = ["crates/planar-cli",
+    "crates/planar-config",
+    "crates/planar-config-macro", "crates/planar-dsl", "crates/planar-runtime",
+]
+
+[workspace.dependencies]
+planar-config-macro = { path = "crates/planar-config-macro" }
+
+miette = { version = "7.6.0", features = ["fancy", "serde"] }
+kdl = "6.5.0"
+thiserror = "2.0.17"

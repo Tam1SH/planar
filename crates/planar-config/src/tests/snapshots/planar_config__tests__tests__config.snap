@@ -1,0 +1,387 @@
+---
+source: crates/planar-config/src/tests/mod.rs
+expression: result
+---
+PlanarConfigDef(
+    Spanned(
+        PlanarConfigDefData {
+            project: ProjectDef(
+                Spanned(
+                    ProjectDefData {
+                        name: "I'm not Google",
+                    },
+                ),
+            ),
+            coverage: Some(
+                CoverageDef(
+                    Spanned(
+                        CoverageDefData {
+                            report: Warning,
+                            ignores: [
+                                "docs/**",
+                                "scripts/tmp/*.json",
+                                "README.md",
+                            ],
+                        },
+                    ),
+                ),
+            ),
+            safety: Some(
+                SafetyDef(
+                    Spanned(
+                        SafetyDefData {
+                            contracts: Some(
+                                ContractsDef(
+                                    Spanned(
+                                        ContractsDefData {
+                                            enforce_usage: Some(
+                                                true,
+                                            ),
+                                            enforce_types: Some(
+                                                false,
+                                            ),
+                                            allow_breaking_unused: Some(
+                                                true,
+                                            ),
+                                        },
+                                    ),
+                                ),
+                            ),
+                            stats: Some(
+                                StatsDef(
+                                    Spanned(
+                                        StatsDefData {
+                                            max_orphan_rate: Some(
+                                                0.15,
+                                            ),
+                                            max_overlay_depth: Some(
+                                                5,
+                                            ),
+                                        },
+                                    ),
+                                ),
+                            ),
+                        },
+                    ),
+                ),
+            ),
+            global_ignores: [
+                GlobalIgnoreDef(
+                    Spanned(
+                        GlobalIgnoreDefData {
+                            pattern: "legacy/**/*.json",
+                            rule: "json-syntax-error",
+                        },
+                    ),
+                ),
+                GlobalIgnoreDef(
+                    Spanned(
+                        GlobalIgnoreDefData {
+                            pattern: "vendor/**",
+                            rule: "*",
+                        },
+                    ),
+                ),
+            ],
+            scopes: [
+                ScopeDef(
+                    Spanned(
+                        ScopeDefData {
+                            name: "shared-infra",
+                            search_paths: [
+                                "infra/shared/**",
+                            ],
+                            includes: [
+                                IncludeDef(
+                                    Spanned(
+                                        IncludeDefData {
+                                            pattern: "*.yaml",
+                                            language: Some(
+                                                "k8s-base",
+                                            ),
+                                            role: None,
+                                        },
+                                    ),
+                                ),
+                            ],
+                            resolution: Some(
+                                ResolutionDef(
+                                    Spanned(
+                                        ResolutionDefData {
+                                            mode: Some(
+                                                Flat,
+                                            ),
+                                            imports: [],
+                                            peer_imports: [],
+                                            bindings: [],
+                                        },
+                                    ),
+                                ),
+                            ),
+                        },
+                    ),
+                ),
+            ],
+            workspaces: [
+                WorkspaceDef(
+                    Spanned(
+                        WorkspaceDefData {
+                            name: "microservices",
+                            search_paths: [
+                                "apps/**",
+                                "libs/**",
+                            ],
+                            anchors: [
+                                "package.json",
+                                "Cargo.toml",
+                            ],
+                            ignores: [
+                                "**/node_modules/**",
+                                "**/target/**",
+                            ],
+                            templates: [
+                                IncludeDef(
+                                    Spanned(
+                                        IncludeDefData {
+                                            pattern: "k8s/*.yaml",
+                                            language: Some(
+                                                "kubernetes",
+                                            ),
+                                            role: None,
+                                        },
+                                    ),
+                                ),
+                                IncludeDef(
+                                    Spanned(
+                                        IncludeDefData {
+                                            pattern: "Dockerfile",
+                                            language: Some(
+                                                "docker",
+                                            ),
+                                            role: None,
+                                        },
+                                    ),
+                                ),
+                                IncludeDef(
+                                    Spanned(
+                                        IncludeDefData {
+                                            pattern: "values-prod.yaml",
+                                            language: Some(
+                                                "helm",
+                                            ),
+                                            role: Some(
+                                                "overlay",
+                                            ),
+                                        },
+                                    ),
+                                ),
+                                IncludeDef(
+                                    Spanned(
+                                        IncludeDefData {
+                                            pattern: "config.toml",
+                                            language: None,
+                                            role: None,
+                                        },
+                                    ),
+                                ),
+                            ],
+                            lint: Some(
+                                LintSectionDef(
+                                    Spanned(
+                                        LintSectionDefData {
+                                            tools: [
+                                                LintToolDef(
+                                                    Spanned(
+                                                        LintToolDefData {
+                                                            tool_name: "checkov",
+                                                            args: [
+                                                                LintArgDef(
+                                                                    Spanned(
+                                                                        LintArgDefData {
+                                                                            flag: "--check",
+                                                                            value: Some(
+                                                                                "CKV_K8S_*",
+                                                                            ),
+                                                                        },
+                                                                    ),
+                                                                ),
+                                                                LintArgDef(
+                                                                    Spanned(
+                                                                        LintArgDefData {
+                                                                            flag: "--quiet",
+                                                                            value: None,
+                                                                        },
+                                                                    ),
+                                                                ),
+                                                                LintArgDef(
+                                                                    Spanned(
+                                                                        LintArgDefData {
+                                                                            flag: "--framework",
+                                                                            value: Some(
+                                                                                "kubernetes",
+                                                                            ),
+                                                                        },
+                                                                    ),
+                                                                ),
+                                                            ],
+                                                        },
+                                                    ),
+                                                ),
+                                            ],
+                                        },
+                                    ),
+                                ),
+                            ),
+                            resolution: Some(
+                                ResolutionDef(
+                                    Spanned(
+                                        ResolutionDefData {
+                                            mode: Some(
+                                                Isolation,
+                                            ),
+                                            imports: [
+                                                "shared-infra",
+                                            ],
+                                            peer_imports: [
+                                                ImportPeersDef(
+                                                    Spanned(
+                                                        ImportPeersDefData {
+                                                            from_workspace: "microservices",
+                                                            as_namespace: Some(
+                                                                true,
+                                                            ),
+                                                        },
+                                                    ),
+                                                ),
+                                            ],
+                                            bindings: [],
+                                        },
+                                    ),
+                                ),
+                            ),
+                        },
+                    ),
+                ),
+            ],
+            targets: [
+                TargetDef(
+                    Spanned(
+                        TargetDefData {
+                            name: "legacy-monolith",
+                            root: Some(
+                                "legacy/core",
+                            ),
+                            env: Some(
+                                EnvSectionDef(
+                                    Spanned(
+                                        EnvSectionDefData {
+                                            items: [
+                                                EnvItemDef(
+                                                    Spanned(
+                                                        LoadFile(
+                                                            EnvLoadFileDef(
+                                                                Spanned(
+                                                                    EnvLoadFileDefData {
+                                                                        path: ".env.prod",
+                                                                    },
+                                                                ),
+                                                            ),
+                                                        ),
+                                                    ),
+                                                ),
+                                                EnvItemDef(
+                                                    Spanned(
+                                                        Var(
+                                                            EnvVarDef(
+                                                                Spanned(
+                                                                    EnvVarDefData {
+                                                                        key: "PORT",
+                                                                        value: "8080",
+                                                                    },
+                                                                ),
+                                                            ),
+                                                        ),
+                                                    ),
+                                                ),
+                                                EnvItemDef(
+                                                    Spanned(
+                                                        Var(
+                                                            EnvVarDef(
+                                                                Spanned(
+                                                                    EnvVarDefData {
+                                                                        key: "DEBUG",
+                                                                        value: "false",
+                                                                    },
+                                                                ),
+                                                            ),
+                                                        ),
+                                                    ),
+                                                ),
+                                            ],
+                                        },
+                                    ),
+                                ),
+                            ),
+                            includes: [
+                                IncludeDef(
+                                    Spanned(
+                                        IncludeDefData {
+                                            pattern: "docker-compose.yml",
+                                            language: Some(
+                                                "docker-compose",
+                                            ),
+                                            role: None,
+                                        },
+                                    ),
+                                ),
+                            ],
+                            resolution: Some(
+                                ResolutionDef(
+                                    Spanned(
+                                        ResolutionDefData {
+                                            mode: Some(
+                                                Flat,
+                                            ),
+                                            imports: [],
+                                            peer_imports: [],
+                                            bindings: [
+                                                BindingDef(
+                                                    Spanned(
+                                                        File(
+                                                            BindFileDef(
+                                                                Spanned(
+                                                                    BindFileDefData {
+                                                                        path: "../../infra/secrets.json",
+                                                                        alias: "global-secrets",
+                                                                    },
+                                                                ),
+                                                            ),
+                                                        ),
+                                                    ),
+                                                ),
+                                                BindingDef(
+                                                    Spanned(
+                                                        Scope(
+                                                            BindScopeDef(
+                                                                Spanned(
+                                                                    BindScopeDefData {
+                                                                        name: "shared-infra",
+                                                                        alias: "common",
+                                                                    },
+                                                                ),
+                                                            ),
+                                                        ),
+                                                    ),
+                                                ),
+                                            ],
+                                        },
+                                    ),
+                                ),
+                            ),
+                        },
+                    ),
+                ),
+            ],
+        },
+    ),
+)

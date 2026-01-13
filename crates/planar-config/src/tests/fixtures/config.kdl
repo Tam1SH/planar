@@ -1,0 +1,108 @@
+project "I'm not Google"
+
+// -------------------------------------------------------------------------
+// 1. GLOBAL SAFETY & COVERAGE (Защита и Метрики)
+// -------------------------------------------------------------------------
+
+coverage {
+    report "warning" 
+    
+    ignore "docs/**"
+    ignore "scripts/tmp/*.json"
+    ignore "README.md"
+}
+
+
+safety {
+    contracts {
+        enforce-usage #true      
+        enforce-types #false      
+        allow-breaking-unused #true
+    }
+    stats {
+        max-orphan-rate 0.15     
+        max-overlay-depth 5
+    }
+}
+
+ignore "legacy/**/*.json" rule="json-syntax-error"
+ignore "vendor/**" rule="*"
+
+// -------------------------------------------------------------------------
+// 2. SCOPES (SHARED LIBS)
+// -------------------------------------------------------------------------
+
+scope "shared-infra" {
+    in "infra/shared/**"
+    
+    include "*.yaml" language="k8s-base"
+    
+    resolution {
+        mode "flat"
+    }
+}
+
+// -------------------------------------------------------------------------
+// 3. WORKSPACES (AUTO-DISCOVERY FACTORY)
+// -------------------------------------------------------------------------
+
+workspace "microservices" {
+    
+    in "apps/**"
+    in "libs/**"
+
+    anchor "package.json"
+    anchor "Cargo.toml"
+
+    ignore "**/node_modules/**"
+    ignore "**/target/**"
+
+    include "k8s/*.yaml" language="kubernetes"
+    include "Dockerfile" language="docker"
+    
+    include "values-prod.yaml" language="helm" role="overlay"
+
+    include "config.toml"
+
+    lint {
+        use "checkov" {
+            
+            arg "--check" "CKV_K8S_*"
+            arg "--quiet" 
+            arg "--framework" "kubernetes"
+        }
+    }
+
+    resolution {
+        mode "isolation" 
+
+        import "shared-infra"
+
+        import-peers "microservices" as-namespace=#true
+    }
+}
+
+// -------------------------------------------------------------------------
+// 4. MANUAL TARGETS (LEGACY / SPECIAL CASES)
+// -------------------------------------------------------------------------
+
+target "legacy-monolith" {
+    
+    root "legacy/core"
+    
+    env {
+        load-file ".env.prod"
+        var "PORT" "8080"
+        var "DEBUG" "false"
+    }
+
+    include "docker-compose.yml" language="docker-compose"
+    
+    resolution {
+        mode "flat"
+        
+        bind-file "../../infra/secrets.json" as="global-secrets"
+        
+        bind-scope "shared-infra" as="common"
+    }
+}

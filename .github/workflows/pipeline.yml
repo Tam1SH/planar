@@ -1,0 +1,85 @@
+name: Grammar Factory
+on:
+  push:
+    paths:
+      - 'grammars.json'
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: set-matrix
+        run: |
+          JSON=$(cat grammars.json | jq -c '.')
+          echo "matrix=${JSON}" >> $GITHUB_OUTPUT
+
+  build:
+    needs: setup
+    strategy:
+      matrix:
+        grammar: ${{ fromJSON(needs.setup.outputs.matrix) }}
+        os: [ubuntu-latest, macos-latest, windows-2022]
+        include:
+          - os: ubuntu-latest
+            suffix: so
+            platform: linux
+          - os: macos-latest
+            suffix: dylib
+            platform: macos
+          - os: windows-2022
+            suffix: dll
+            platform: windows
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout Grammar Repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ matrix.grammar.repo }}
+          path: source
+
+      - name: Compile (POSIX)
+        if: matrix.os != 'windows-2022'
+        run: |
+          cd source/src
+          cc -O3 -fPIC -I. -c parser.c -o parser.o
+          if [ -f "scanner.c" ]; then
+            cc -O3 -fPIC -I. -c scanner.c -o scanner.o
+          elif [ -f "scanner.cc" ]; then
+            c++ -O3 -fPIC -I. -c scanner.cc -o scanner.o
+          fi
+          c++ -shared *.o -o ../../${{ matrix.grammar.name }}-${{ matrix.platform }}-${{ runner.arch }}.${{ matrix.suffix }}
+
+      - name: Compile (Windows)
+        if: matrix.os == 'windows-2022'
+        shell: pwsh
+        run: |
+          cd source/src
+          # Для Windows используем стандартный компилятор MSVC
+          cl.exe /O2 /LD /I. parser.c /Fe:../../${{ matrix.grammar.name }}-${{ matrix.platform }}-${{ runner.arch }}.dll
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.grammar.name }}-${{ matrix.platform }}-${{ runner.arch }}
+          path: ${{ matrix.grammar.name }}-${{ matrix.platform }}-${{ runner.arch }}.${{ matrix.suffix }}
+
+  publish:
+    needs: [setup, build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: latest
+          files: |
+            **/*.so
+            **/*.dylib
+            **/*.dll
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

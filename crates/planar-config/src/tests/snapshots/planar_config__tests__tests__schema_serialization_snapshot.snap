@@ -1,0 +1,663 @@
+---
+source: crates/planar-config/src/tests/mod.rs
+expression: schema
+---
+- matcher:
+    keyword: "<unknown>"
+  description: []
+  examples: []
+  args: []
+  props: []
+  children:
+    fixed:
+      - matcher:
+          keyword: project
+        description: []
+        examples: []
+        args:
+          - name: name
+            description: []
+            kind: string
+            required: true
+            default: ~
+        props: []
+        children: none
+      - matcher:
+          keyword: coverage
+        description: []
+        examples: []
+        args: []
+        props: []
+        children:
+          fixed:
+            - matcher:
+                keyword: report
+              description: []
+              examples: []
+              args:
+                - name: value
+                  description: []
+                  kind:
+                    enum:
+                      - warning
+                      - error
+                      - none
+                  required: true
+                  default: ~
+              props: []
+              children: none
+            - matcher:
+                keyword: ignore
+              description: []
+              examples: []
+              args:
+                - name: value
+                  description: []
+                  kind: string
+                  required: true
+                  default: ~
+              props: []
+              children: none
+      - matcher:
+          keyword: safety
+        description: []
+        examples: []
+        args: []
+        props: []
+        children:
+          fixed:
+            - matcher:
+                keyword: contracts
+              description: []
+              examples: []
+              args: []
+              props: []
+              children:
+                fixed:
+                  - matcher:
+                      keyword: enforce-usage
+                    description: []
+                    examples: []
+                    args:
+                      - name: value
+                        description: []
+                        kind: bool
+                        required: true
+                        default: ~
+                    props: []
+                    children: none
+                  - matcher:
+                      keyword: enforce-types
+                    description: []
+                    examples: []
+                    args:
+                      - name: value
+                        description: []
+                        kind: bool
+                        required: true
+                        default: ~
+                    props: []
+                    children: none
+                  - matcher:
+                      keyword: allow-breaking-unused
+                    description: []
+                    examples: []
+                    args:
+                      - name: value
+                        description: []
+                        kind: bool
+                        required: true
+                        default: ~
+                    props: []
+                    children: none
+            - matcher:
+                keyword: stats
+              description: []
+              examples: []
+              args: []
+              props: []
+              children:
+                fixed:
+                  - matcher:
+                      keyword: max-orphan-rate
+                    description: []
+                    examples: []
+                    args:
+                      - name: value
+                        description: []
+                        kind: float
+                        required: true
+                        default: ~
+                    props: []
+                    children: none
+                  - matcher:
+                      keyword: max-overlay-depth
+                    description: []
+                    examples: []
+                    args:
+                      - name: value
+                        description: []
+                        kind: int
+                        required: true
+                        default: ~
+                    props: []
+                    children: none
+      - matcher:
+          keyword: ignore
+        description: []
+        examples: []
+        args:
+          - name: pattern
+            description: []
+            kind: string
+            required: true
+            default: ~
+        props:
+          - name: rule
+            description: []
+            kind: string
+            required: true
+            default: ~
+        children: none
+      - matcher:
+          keyword: scope
+        description: []
+        examples: []
+        args:
+          - name: name
+            description: []
+            kind: string
+            required: true
+            default: ~
+        props: []
+        children:
+          fixed:
+            - matcher:
+                keyword: in
+              description: []
+              examples: []
+              args:
+                - name: value
+                  description: []
+                  kind: string
+                  required: true
+                  default: ~
+              props: []
+              children: none
+            - matcher:
+                keyword: include
+              description: []
+              examples: []
+              args:
+                - name: pattern
+                  description: []
+                  kind: string
+                  required: true
+                  default: ~
+              props:
+                - name: language
+                  description: []
+                  kind: string
+                  required: false
+                  default: ~
+                - name: role
+                  description: []
+                  kind: string
+                  required: false
+                  default: ~
+              children: none
+            - matcher:
+                keyword: resolution
+              description: []
+              examples: []
+              args: []
+              props: []
+              children:
+                fixed:
+                  - matcher:
+                      keyword: mode
+                    description: []
+                    examples: []
+                    args:
+                      - name: value
+                        description: []
+                        kind:
+                          enum:
+                            - flat
+                            - recursive
+                            - isolation
+                        required: true
+                        default: ~
+                    props: []
+                    children: none
+                  - matcher:
+                      keyword: import
+                    description: []
+                    examples: []
+                    args:
+                      - name: value
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    props: []
+                    children: none
+                  - matcher:
+                      keyword: import-peers
+                    description: []
+                    examples: []
+                    args:
+                      - name: from_workspace
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    props:
+                      - name: as-namespace
+                        description: []
+                        kind: bool
+                        required: false
+                        default: ~
+                    children: none
+                  - matcher:
+                      keyword: bind-file
+                    description: []
+                    examples: []
+                    args:
+                      - name: path
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    props:
+                      - name: as
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    children: none
+                  - matcher:
+                      keyword: bind-scope
+                    description: []
+                    examples: []
+                    args:
+                      - name: name
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    props:
+                      - name: as
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    children: none
+      - matcher:
+          keyword: workspace
+        description: []
+        examples: []
+        args:
+          - name: name
+            description: []
+            kind: string
+            required: true
+            default: ~
+        props: []
+        children:
+          fixed:
+            - matcher:
+                keyword: in
+              description: []
+              examples: []
+              args:
+                - name: value
+                  description: []
+                  kind: string
+                  required: true
+                  default: ~
+              props: []
+              children: none
+            - matcher:
+                keyword: anchor
+              description: []
+              examples: []
+              args:
+                - name: value
+                  description: []
+                  kind: string
+                  required: true
+                  default: ~
+              props: []
+              children: none
+            - matcher:
+                keyword: ignore
+              description: []
+              examples: []
+              args:
+                - name: value
+                  description: []
+                  kind: string
+                  required: true
+                  default: ~
+              props: []
+              children: none
+            - matcher:
+                keyword: include
+              description: []
+              examples: []
+              args:
+                - name: pattern
+                  description: []
+                  kind: string
+                  required: true
+                  default: ~
+              props:
+                - name: language
+                  description: []
+                  kind: string
+                  required: false
+                  default: ~
+                - name: role
+                  description: []
+                  kind: string
+                  required: false
+                  default: ~
+              children: none
+            - matcher:
+                keyword: lint
+              description: []
+              examples: []
+              args: []
+              props: []
+              children:
+                fixed:
+                  - matcher:
+                      keyword: use
+                    description: []
+                    examples: []
+                    args:
+                      - name: tool_name
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    props: []
+                    children:
+                      fixed:
+                        - matcher:
+                            keyword: arg
+                          description: []
+                          examples: []
+                          args:
+                            - name: flag
+                              description: []
+                              kind: string
+                              required: true
+                              default: ~
+                            - name: value
+                              description: []
+                              kind: string
+                              required: false
+                              default: ~
+                          props: []
+                          children: none
+            - matcher:
+                keyword: resolution
+              description: []
+              examples: []
+              args: []
+              props: []
+              children:
+                fixed:
+                  - matcher:
+                      keyword: mode
+                    description: []
+                    examples: []
+                    args:
+                      - name: value
+                        description: []
+                        kind:
+                          enum:
+                            - flat
+                            - recursive
+                            - isolation
+                        required: true
+                        default: ~
+                    props: []
+                    children: none
+                  - matcher:
+                      keyword: import
+                    description: []
+                    examples: []
+                    args:
+                      - name: value
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    props: []
+                    children: none
+                  - matcher:
+                      keyword: import-peers
+                    description: []
+                    examples: []
+                    args:
+                      - name: from_workspace
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    props:
+                      - name: as-namespace
+                        description: []
+                        kind: bool
+                        required: false
+                        default: ~
+                    children: none
+                  - matcher:
+                      keyword: bind-file
+                    description: []
+                    examples: []
+                    args:
+                      - name: path
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    props:
+                      - name: as
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    children: none
+                  - matcher:
+                      keyword: bind-scope
+                    description: []
+                    examples: []
+                    args:
+                      - name: name
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    props:
+                      - name: as
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    children: none
+      - matcher:
+          keyword: target
+        description: []
+        examples: []
+        args:
+          - name: name
+            description: []
+            kind: string
+            required: true
+            default: ~
+        props: []
+        children:
+          fixed:
+            - matcher:
+                keyword: root
+              description: []
+              examples: []
+              args:
+                - name: value
+                  description: []
+                  kind:
+                    typedString: path
+                  required: true
+                  default: ~
+              props: []
+              children: none
+            - matcher:
+                keyword: env
+              description: []
+              examples: []
+              args: []
+              props: []
+              children:
+                fixed:
+                  - matcher:
+                      keyword: load-file
+                    description: []
+                    examples: []
+                    args:
+                      - name: path
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    props: []
+                    children: none
+                  - matcher:
+                      keyword: var
+                    description: []
+                    examples: []
+                    args:
+                      - name: key
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                      - name: value
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    props: []
+                    children: none
+            - matcher:
+                keyword: include
+              description: []
+              examples: []
+              args:
+                - name: pattern
+                  description: []
+                  kind: string
+                  required: true
+                  default: ~
+              props:
+                - name: language
+                  description: []
+                  kind: string
+                  required: false
+                  default: ~
+                - name: role
+                  description: []
+                  kind: string
+                  required: false
+                  default: ~
+              children: none
+            - matcher:
+                keyword: resolution
+              description: []
+              examples: []
+              args: []
+              props: []
+              children:
+                fixed:
+                  - matcher:
+                      keyword: mode
+                    description: []
+                    examples: []
+                    args:
+                      - name: value
+                        description: []
+                        kind:
+                          enum:
+                            - flat
+                            - recursive
+                            - isolation
+                        required: true
+                        default: ~
+                    props: []
+                    children: none
+                  - matcher:
+                      keyword: import
+                    description: []
+                    examples: []
+                    args:
+                      - name: value
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    props: []
+                    children: none
+                  - matcher:
+                      keyword: import-peers
+                    description: []
+                    examples: []
+                    args:
+                      - name: from_workspace
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    props:
+                      - name: as-namespace
+                        description: []
+                        kind: bool
+                        required: false
+                        default: ~
+                    children: none
+                  - matcher:
+                      keyword: bind-file
+                    description: []
+                    examples: []
+                    args:
+                      - name: path
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    props:
+                      - name: as
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    children: none
+                  - matcher:
+                      keyword: bind-scope
+                    description: []
+                    examples: []
+                    args:
+                      - name: name
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    props:
+                      - name: as
+                        description: []
+                        kind: string
+                        required: true
+                        default: ~
+                    children: none
