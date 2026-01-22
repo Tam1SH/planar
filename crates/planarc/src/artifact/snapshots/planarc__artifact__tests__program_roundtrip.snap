@@ -5,11 +5,19 @@ expression: "(&original, archived)"
 (
     Bundle {
         symbol_table: SymbolTable {
+            name_to_id: {
+                "core.Base": SymbolId(
+                    1,
+                ),
+            },
             symbols: {
-                "core.Base": SymbolMetadata {
+                SymbolId(
+                    1,
+                ): SymbolMetadata {
                     id: SymbolId(
                         1,
                     ),
+                    fqmn: "core.Base",
                     kind: Fact,
                     location: Location {
                         file_id: FileId(
@@ -24,6 +32,9 @@ expression: "(&original, archived)"
                             col_end: 0,
                         },
                     },
+                    visibility: ModulePrivate,
+                    package: "main",
+                    module: "core",
                 },
             },
             next_id: 2,
@@ -60,6 +71,7 @@ expression: "(&original, archived)"
                 types: [],
                 externs: [],
                 queries: [],
+                nodes: [],
             },
         },
         wasm_modules: {
@@ -75,11 +87,19 @@ expression: "(&original, archived)"
     },
     ArchivedBundle {
         symbol_table: ArchivedSymbolTable {
+            name_to_id: {
+                "core.Base": ArchivedSymbolId(
+                    1,
+                ),
+            },
             symbols: {
-                "core.Base": ArchivedSymbolMetadata {
+                ArchivedSymbolId(
+                    1,
+                ): ArchivedSymbolMetadata {
                     id: ArchivedSymbolId(
                         1,
                     ),
+                    fqmn: "core.Base",
                     kind: Fact,
                     location: ArchivedLocation {
                         file_id: ArchivedFileId(
@@ -94,6 +114,9 @@ expression: "(&original, archived)"
                             col_end: 0,
                         },
                     },
+                    visibility: ModulePrivate,
+                    package: "main",
+                    module: "core",
                 },
             },
             next_id: 2,
@@ -130,6 +153,7 @@ expression: "(&original, archived)"
                 types: [],
                 externs: [],
                 queries: [],
+                nodes: [],
             },
         },
         wasm_modules: {

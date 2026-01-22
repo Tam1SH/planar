@@ -1,9 +1,9 @@
-pub mod parser;
-pub mod schema;
 pub mod bad;
-pub mod var_registry;
+pub mod config;
 pub mod error;
 pub mod model;
-mod tests;
 pub mod packaging;
-pub mod config;
+pub mod parser;
+pub mod schema;
+mod tests;
+pub mod var_registry;

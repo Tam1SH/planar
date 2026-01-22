@@ -1,8 +1,6 @@
-schema "nginx" grammar="nginx"
-
 import std.fs 
 
-query IncludePattern = `
+query includePattern = `
 (directive
     (keyword) @kw
     (#eq? @kw "include")
@@ -10,12 +8,15 @@ query IncludePattern = `
 )
 `
 
-
+edge Includes = File -> File
 
 node IncludeDirective {
-    match IncludePattern {
-        @path {
-            @path -> resolve_glob @path.text
-        }
+
+    match includePattern {
+
+        let files = resolve_glob @path.text
+
+        emit $CURRENT_FILE -[Includes]-> files 
+        
     }
 }

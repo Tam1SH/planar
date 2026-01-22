@@ -50,8 +50,7 @@ impl<'a> ValidationGenerator<'a> {
                 } else {
                     let has_optional = args.iter().any(|a| a.base.is_option);
                     if !has_optional {
-                        rules
-                            .push(quote!(crate::parser::ensures::Rule::ExactArgs(#arg_count)));
+                        rules.push(quote!(crate::parser::ensures::Rule::ExactArgs(#arg_count)));
                     } else {
                         let min = args.iter().filter(|a| !a.base.is_option).count();
                         rules.push(quote!(crate::parser::ensures::Rule::AtLeastArgs(#min)));

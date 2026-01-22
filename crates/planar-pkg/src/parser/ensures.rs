@@ -5,7 +5,7 @@ use miette::Result;
 
 use crate::parser::{
     ctx::ParseContext,
-    utils::{get_kdl_type_name, PrimitiveType},
+    utils::{PrimitiveType, get_kdl_type_name},
 };
 
 /// Defines validation constraints that can be applied to a KDL node.
@@ -23,7 +23,6 @@ pub enum Rule<'a> {
     AtLeastArgs(usize),
     OnlyKeysTyped(&'a [(&'a str, PrimitiveType)]),
 }
-
 
 impl ParseContext {
     /// Applies a list of validation rules to the current context.

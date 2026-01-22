@@ -1,4 +1,4 @@
-use planar_config_macro::{planar_node, NodeSchema, Parser};
+use planar_config_macro::{NodeSchema, Parser, planar_node};
 
 #[planar_node]
 #[derive(Parser, Clone, Debug, NodeSchema)]
@@ -9,7 +9,7 @@ pub struct PackageManifest {
 
     #[node(child)]
     pub dependencies: Option<DependenciesDef>,
-    
+
     #[node(child)]
     pub grammars: Option<GrammarsDef>,
 }
@@ -36,16 +36,16 @@ pub struct DependenciesDef {
 pub struct DependencyItemDef {
     #[node(node_name)]
     pub name: String,
-    
+
     #[node(prop)]
     pub path: Option<String>,
-    
+
     #[node(prop)]
     pub git: Option<String>,
-    
+
     #[node(prop)]
     pub branch: Option<String>,
-    
+
     #[node(prop)]
     pub tag: Option<String>,
 }
@@ -63,10 +63,10 @@ pub struct GrammarsDef {
 pub struct GrammarItemDef {
     #[node(node_name)]
     pub name: String,
-    
+
     #[node(prop)]
     pub url: Option<String>,
-    
+
     #[node(prop)]
     pub path: Option<String>,
 }

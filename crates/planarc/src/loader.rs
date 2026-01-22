@@ -29,14 +29,16 @@ impl LanguageProvider for DynamicLanguageLoader {
             .with_context(|| format!("Failed to load dynamic library at {:?}", path))?;
 
         let arc_lib = Arc::new(lib);
-        self.libs.write().unwrap().insert(lang_name.to_string(), arc_lib.clone());
+        self.libs
+            .write()
+            .unwrap()
+            .insert(lang_name.to_string(), arc_lib.clone());
 
         unsafe { self.get_symbol(&arc_lib, lang_name) }
     }
 }
 
 impl DynamicLanguageLoader {
-
     #[allow(unsafe_op_in_unsafe_fn)]
     unsafe fn get_symbol(&self, lib: &Library, lang_name: &str) -> Result<Language> {
         let symbol_name = format!("tree_sitter_{}", lang_name.replace('-', "_"));
@@ -45,21 +47,22 @@ impl DynamicLanguageLoader {
     }
 }
 
-
 #[cfg(test)]
 pub struct MockLanguageLoader;
 
 #[cfg(test)]
 impl LanguageProvider for MockLanguageLoader {
-    fn load_language(&self, name: &str, _: &std::path::Path) -> anyhow::Result<tree_sitter::Language> {
+    fn load_language(
+        &self,
+        name: &str,
+        _: &std::path::Path,
+    ) -> anyhow::Result<tree_sitter::Language> {
         match name {
             "pdl" => Ok(tree_sitter_planardl::LANGUAGE.into()),
             _ => Err(anyhow::anyhow!("Grammar {name} not found")),
         }
     }
 }
-
-
 
 #[cfg(test)]
 mod tests {

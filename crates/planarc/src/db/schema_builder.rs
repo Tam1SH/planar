@@ -179,7 +179,7 @@ impl KuzuSchemaBuilder {
 mod tests {
     use super::*;
     use crate::{
-        ast::{Attribute, TypeArgument},
+        ast::Attribute,
         spanned::{FileId, Location, Spanned},
     };
 
@@ -198,7 +198,7 @@ mod tests {
         TypeAnnotation {
             name: s(name),
             args: vec![],
-            refinement: None
+            refinement: None,
         }
     }
 
@@ -206,14 +206,12 @@ mod tests {
         TypeAnnotation {
             name: s("List"),
             args: vec![sp(inner)],
-            refinement: None
+            refinement: None,
         }
     }
 
     fn attr(name: &str) -> Spanned<Attribute> {
-        sp(Attribute {
-            name: s(name),
-        })
+        sp(Attribute { name: s(name) })
     }
 
     fn field(name: &str, ty: TypeAnnotation, attrs: Vec<&str>) -> Spanned<FactField> {
@@ -222,7 +220,6 @@ mod tests {
             attributes,
             name: s(name),
             ty,
-            refinement: None,
         })
     }
 
@@ -232,6 +229,7 @@ mod tests {
             attributes,
             name: s(name),
             fields,
+            vis: Default::default(),
         }
     }
 
@@ -347,11 +345,8 @@ mod tests {
     fn test_generic_mismatch_count() {
         let invalid_list_ty = TypeAnnotation {
             name: s("List"),
-            args: vec![
-                sp(ty_simple("String")),
-                sp(ty_simple("Int")),
-            ],
-            refinement: None
+            args: vec![sp(ty_simple("String")), sp(ty_simple("Int"))],
+            refinement: None,
         };
 
         let f = fact(

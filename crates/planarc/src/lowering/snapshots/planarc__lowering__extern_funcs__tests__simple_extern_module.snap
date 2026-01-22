@@ -3,17 +3,22 @@ source: crates/planarc/src/lowering/extern_funcs.rs
 expression: ast
 ---
 ExternDefinition {
+    vis: Private,
     attributes: [],
     functions: [
         ExternFunction {
-            name: "isPascalCase" @ Span { start: 45, end: 57, line: 3, col: 15, line_end: 2, col_end: 26 },
+            name: "isPascalCase" @ Span { start: 18, end: 30, line: 1, col: 19, line_end: 0, col_end: 30 },
             args: [
                 ExternArgument {
-                    name: "name" @ Span { start: 58, end: 62, line: 3, col: 28, line_end: 2, col_end: 31 },
-                    ty: "String" @ Span { start: 64, end: 70, line: 3, col: 34, line_end: 2, col_end: 39 },
-                } @ Span { start: 58, end: 70, line: 3, col: 28, line_end: 2, col_end: 39 },
+                    name: "name" @ Span { start: 31, end: 35, line: 1, col: 32, line_end: 0, col_end: 35 },
+                    ty: TypeAnnotation {
+                        name: "String" @ Span { start: 37, end: 43, line: 1, col: 38, line_end: 0, col_end: 43 },
+                        refinement: None,
+                        args: [],
+                    } @ Span { start: 37, end: 43, line: 1, col: 38, line_end: 0, col_end: 43 },
+                } @ Span { start: 31, end: 43, line: 1, col: 32, line_end: 0, col_end: 43 },
             ],
             return_type: None,
-        } @ Span { start: 45, end: 86, line: 3, col: 15, line_end: 3, col_end: 0 },
+        } @ Span { start: 18, end: 59, line: 1, col: 19, line_end: 0, col_end: 59 },
     ],
-} @ Span { start: 13, end: 99, line: 2, col: 13, line_end: 3, col_end: 13 }
+} @ Span { start: 0, end: 60, line: 1, col: 1, line_end: 0, col_end: 60 }

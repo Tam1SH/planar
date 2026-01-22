@@ -9,9 +9,9 @@ mod unit;
 mod utils;
 pub mod validator;
 
-pub mod linker;
 pub mod artifact;
 pub mod compiler;
-pub mod module_loader;
+pub mod linker;
 pub mod loader;
+pub mod module_loader;
 pub use loader::DynamicLanguageLoader;

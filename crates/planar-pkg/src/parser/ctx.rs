@@ -10,9 +10,7 @@ use std::{
 use kdl::{KdlDocument, KdlEntry, KdlNode};
 use miette::{NamedSource, Result, SourceSpan};
 
-use crate::{
-    bad::Bad, parser::typed_value::TypedValue, var_registry::VarRegistry,
-};
+use crate::{bad::Bad, parser::typed_value::TypedValue, var_registry::VarRegistry};
 
 #[derive(Debug, Clone)]
 pub struct ParseContext {

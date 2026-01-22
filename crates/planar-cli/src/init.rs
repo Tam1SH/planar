@@ -1,12 +1,11 @@
 use anyhow::{Context, bail};
-use console::{style, Emoji};
+use console::{Emoji, style};
 use std::fs;
 use std::path::{Path, PathBuf};
 
 static SPARKLE: Emoji<'_, '_> = Emoji("✨ ", "");
 static FILE: Emoji<'_, '_> = Emoji("📄 ", "");
-static FOLDER: Emoji<'_, '_> = Emoji("gd ", ""); 
-
+static FOLDER: Emoji<'_, '_> = Emoji("gd ", "");
 
 const MAIN_PDL_CONTENT: &str = r#"schema "nginx" grammar="tree-sitter-nginx"
 
@@ -30,11 +29,11 @@ node IncludeDirective {
 "#;
 
 pub fn run(path: Option<String>) -> anyhow::Result<()> {
-    
     let (root_path, name) = match path {
         Some(p) => {
             let path = PathBuf::from(&p);
-            let name = path.file_name()
+            let name = path
+                .file_name()
                 .context("Invalid path")?
                 .to_string_lossy()
                 .to_string();
@@ -42,7 +41,8 @@ pub fn run(path: Option<String>) -> anyhow::Result<()> {
         }
         None => {
             let path = std::env::current_dir()?;
-            let name = path.file_name()
+            let name = path
+                .file_name()
                 .context("Cannot determine directory name")?
                 .to_string_lossy()
                 .to_string();
@@ -57,10 +57,14 @@ pub fn run(path: Option<String>) -> anyhow::Result<()> {
     let src_dir = root_path.join("src");
     fs::create_dir_all(&src_dir).context("Failed to create src directory")?;
 
-    println!("{} Creating new Planar project: {}", SPARKLE, style(&name).bold().cyan());
+    println!(
+        "{} Creating new Planar project: {}",
+        SPARKLE,
+        style(&name).bold().cyan()
+    );
 
     let kdl_content = format!(
-         r#"// Project metadata
+        r#"// Project metadata
 package {{
     name "{}"
     version "0.1.0"

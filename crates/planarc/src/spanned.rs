@@ -1,8 +1,22 @@
-use std::fmt::Debug;
 use derive_more::Display;
 use rkyv::{Archive, Deserialize, Serialize};
+use std::fmt::Debug;
 
-#[derive(Default, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Archive, Serialize, Deserialize, Display)]
+#[derive(
+    Default,
+    Debug,
+    Clone,
+    Copy,
+    PartialEq,
+    Eq,
+    Hash,
+    PartialOrd,
+    Ord,
+    Archive,
+    Serialize,
+    Deserialize,
+    Display,
+)]
 #[rkyv(derive(Debug, PartialEq, Eq, PartialOrd, Ord))]
 pub struct FileId(pub u32);
 
@@ -44,8 +58,8 @@ impl<T: Debug> Debug for Spanned<T> {
 
 impl<T> std::fmt::Debug for ArchivedSpanned<T>
 where
-    T: rkyv::Archive,             
-    T::Archived: std::fmt::Debug,    
+    T: rkyv::Archive,
+    T::Archived: std::fmt::Debug,
 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         if f.alternate() {
@@ -55,8 +69,6 @@ where
         }
     }
 }
-
-
 
 #[derive(Default, Debug, Clone, Copy, PartialEq, Eq, Archive, Serialize, Deserialize, Display)]
 #[rkyv(derive(Debug))]
@@ -71,15 +83,14 @@ pub struct Span {
 }
 
 impl Span {
-    
     pub fn new(start: usize, end: usize, line: u32, col: u32, line_end: u32, col_end: u32) -> Self {
-        Self { 
-            start, 
-            end, 
-            line, 
+        Self {
+            start,
+            end,
+            line,
             col,
             col_end,
-            line_end
+            line_end,
         }
     }
 
@@ -92,13 +103,11 @@ impl Span {
     }
 }
 
-
 impl From<Location> for miette::SourceSpan {
     fn from(loc: Location) -> Self {
         (loc.span.start..loc.span.end).into()
     }
 }
-
 
 impl From<std::ops::Range<usize>> for Span {
     fn from(value: std::ops::Range<usize>) -> Self {

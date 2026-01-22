@@ -1,8 +1,8 @@
+use planar_config_macro::{NodeSchema, Parser, planar_node};
 use std::path::PathBuf;
-use planar_config_macro::{planar_node, NodeSchema, Parser};
-use strum::{EnumString, Display};
+use strum::{Display, EnumString};
 
-use crate::schema::{definitions::ValueKind, value_info::KdlValueInfo}; 
+use crate::schema::{definitions::ValueKind, value_info::KdlValueInfo};
 
 pub mod planardl;
 
@@ -65,7 +65,7 @@ pub struct CoverageDef {
 
     // ignore "docs/**" (Simple path ignore inside coverage)
     #[node(child, name = "ignore")]
-    pub ignores: Vec<String>, 
+    pub ignores: Vec<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, EnumString, Display)]
@@ -78,11 +78,7 @@ pub enum ReportLevel {
 
 impl KdlValueInfo for ReportLevel {
     fn value_kind() -> ValueKind {
-        ValueKind::Enum(vec![
-            "warning".into(),
-            "error".into(),
-            "none".into(),
-        ])
+        ValueKind::Enum(vec!["warning".into(), "error".into(), "none".into()])
     }
 }
 
@@ -92,7 +88,7 @@ impl KdlValueInfo for ReportLevel {
 pub struct SafetyDef {
     #[node(child)]
     pub contracts: Option<ContractsDef>,
-    
+
     #[node(child)]
     pub stats: Option<StatsDef>,
 }
@@ -103,10 +99,10 @@ pub struct SafetyDef {
 pub struct ContractsDef {
     #[node(child, flat, name = "enforce-usage")]
     pub enforce_usage: Option<bool>,
-    
+
     #[node(child, flat, name = "enforce-types")]
     pub enforce_types: Option<bool>,
-    
+
     #[node(child, flat, name = "allow-breaking-unused")]
     pub allow_breaking_unused: Option<bool>,
 }
@@ -209,7 +205,6 @@ pub struct TargetDef {
     pub resolution: Option<ResolutionDef>,
 }
 
-
 #[planar_node]
 #[derive(Parser, Clone, Debug, NodeSchema)]
 #[node(name = "include")]
@@ -259,11 +254,7 @@ pub enum ResolutionMode {
 
 impl KdlValueInfo for ResolutionMode {
     fn value_kind() -> ValueKind {
-        ValueKind::Enum(vec![
-            "flat".into(),
-            "recursive".into(),
-            "isolation".into(),
-        ])
+        ValueKind::Enum(vec!["flat".into(), "recursive".into(), "isolation".into()])
     }
 }
 
@@ -324,7 +315,7 @@ pub struct EnvSectionDef {
 pub enum EnvItemDef {
     #[node(name = "load-file")]
     LoadFile(EnvLoadFileDef),
-    
+
     #[node(name = "var")]
     Var(EnvVarDef),
 }

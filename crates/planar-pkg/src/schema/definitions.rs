@@ -248,7 +248,7 @@ pub enum ChildrenSchema {
     /// This is used for collections like `Vec<T>` or `Map<String, T>`, where the user
     /// can repeat the same type of node multiple times.
     Dynamic(Box<NodeSchema>),
-    Recursive(String), 
+    Recursive(String),
 }
 
 // =============================================================================

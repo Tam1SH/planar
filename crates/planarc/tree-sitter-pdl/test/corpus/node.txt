@@ -1,16 +1,4 @@
 ==================
-Schema Header
-==================
-schema "docker-compose" grammar="yaml"
-
----
-
-(source_file
-  header: (header
-    name: (string)
-    grammar_ref: (string)))
-
-==================
 Node with multiple definitions
 ==================
 
@@ -237,6 +225,7 @@ node IncludeDirective {
               (graph_bind
                 (graph_left_statements
                   (identifier))
+                (relation)
                 (graph_right_statements
                   (call_func
                     (fqmn
@@ -331,8 +320,8 @@ Type Declaration
 ==================
 
 type ParsableInt = String where std.is_int it
-type ListPositiveInt = List (i64 where it > 0)
-type Something = i64 where std.math.is_positive (std.math.add it 10)
+pub(pkg) type ListPositiveInt = List (i64 where it > 0)
+pub type Something = i64 where std.math.is_positive (std.math.add it 10)
 #wit-compatible
 #export
 type A = { x: Int y: { z: ParsableInt w: List (i64 where it > 0) } }
@@ -353,6 +342,7 @@ type A = { x: Int y: { z: ParsableInt w: List (i64 where it > 0) } }
             (identifier))
           (it)))))
   (type_declaration
+    (pub)
     (identifier)
     (type_definition
       (type_annotation
@@ -369,6 +359,7 @@ type A = { x: Int y: { z: ParsableInt w: List (i64 where it > 0) } }
               (operator_identifier)
               (number)))))))
   (type_declaration
+    (pub)
     (identifier)
     (type_definition
       (type_annotation
@@ -427,3 +418,21 @@ type A = { x: Int y: { z: ParsableInt w: List (i64 where it > 0) } }
                       (it)
                       (operator_identifier)
                       (number))))))))))))
+
+==================
+Edge Declaration
+==================
+
+edge Includes = File -> File
+---
+
+(source_file
+  (edge_definition
+    (identifier)
+    (type_identifier
+      (fqmn
+        (identifier)))
+    (relation)
+    (type_identifier
+      (fqmn
+        (identifier)))))

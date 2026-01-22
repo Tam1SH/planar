@@ -95,6 +95,56 @@
     }
   },
   {
+    "type": "edge_definition",
+    "named": true,
+    "fields": {
+      "from": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "to": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "pub",
+          "named": true
+        },
+        {
+          "type": "relation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "extern_block",
     "named": true,
     "fields": {},
@@ -186,6 +236,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "pub",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -228,6 +288,10 @@
         },
         {
           "type": "fact_field_definition",
+          "named": true
+        },
+        {
+          "type": "pub",
           "named": true
         }
       ]
@@ -303,16 +367,8 @@
         "required": true,
         "types": [
           {
-            "type": "->",
-            "named": false
-          },
-          {
-            "type": "<-",
-            "named": false
-          },
-          {
-            "type": "<->",
-            "named": false
+            "type": "relation",
+            "named": true
           }
         ]
       },
@@ -360,32 +416,6 @@
           "named": true
         }
       ]
-    }
-  },
-  {
-    "type": "header",
-    "named": true,
-    "fields": {
-      "grammar_ref": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "string",
-            "named": true
-          }
-        ]
-      },
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "string",
-            "named": true
-          }
-        ]
-      }
     }
   },
   {
@@ -467,10 +497,6 @@
           "named": true
         },
         {
-          "type": "operator_section",
-          "named": true
-        },
-        {
           "type": "parenthesized_expression",
           "named": true
         },
@@ -509,7 +535,7 @@
             "named": true
           },
           {
-            "type": "raw_string",
+            "type": "query_literal",
             "named": true
           }
         ]
@@ -542,65 +568,15 @@
       }
     },
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
           "type": "block",
           "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "operator_section",
-    "named": true,
-    "fields": {
-      "operator": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "operator_identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "fqmn",
-          "named": true
         },
         {
-          "type": "in_expression",
-          "named": true
-        },
-        {
-          "type": "it",
-          "named": true
-        },
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "operator_identifier",
-          "named": true
-        },
-        {
-          "type": "operator_section",
-          "named": true
-        },
-        {
-          "type": "parenthesized_expression",
-          "named": true
-        },
-        {
-          "type": "string",
+          "type": "pub",
           "named": true
         }
       ]
@@ -635,10 +611,6 @@
           "named": true
         },
         {
-          "type": "operator_section",
-          "named": true
-        },
-        {
           "type": "parenthesized_expression",
           "named": true
         },
@@ -653,6 +625,22 @@
     "type": "property_access",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "pub",
+    "named": true,
+    "fields": {
+      "pkg": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "(pkg)",
+            "named": false
+          }
+        ]
+      }
+    }
   },
   {
     "type": "query_definition",
@@ -688,6 +676,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "pub",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -735,10 +733,6 @@
             "named": true
           },
           {
-            "type": "operator_section",
-            "named": true
-          },
-          {
             "type": "parenthesized_expression",
             "named": true
           },
@@ -773,10 +767,6 @@
             "named": true
           },
           {
-            "type": "operator_section",
-            "named": true
-          },
-          {
             "type": "parenthesized_expression",
             "named": true
           },
@@ -790,11 +780,6 @@
   },
   {
     "type": "raw_content",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "raw_string",
     "named": true,
     "fields": {}
   },
@@ -827,10 +812,6 @@
           "named": true
         },
         {
-          "type": "operator_section",
-          "named": true
-        },
-        {
           "type": "parenthesized_expression",
           "named": true
         },
@@ -842,25 +823,23 @@
     }
   },
   {
+    "type": "relation",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "source_file",
     "named": true,
     "root": true,
-    "fields": {
-      "header": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "header",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "edge_definition",
+          "named": true
+        },
         {
           "type": "extern_definition",
           "named": true
@@ -985,6 +964,10 @@
         {
           "type": "attribute",
           "named": true
+        },
+        {
+          "type": "pub",
+          "named": true
         }
       ]
     }
@@ -1080,6 +1063,10 @@
     "named": false
   },
   {
+    "type": "(pkg)",
+    "named": false
+  },
+  {
     "type": ")",
     "named": false
   },
@@ -1137,15 +1124,15 @@
     "extra": true
   },
   {
+    "type": "edge",
+    "named": false
+  },
+  {
     "type": "extern",
     "named": false
   },
   {
     "type": "fact",
-    "named": false
-  },
-  {
-    "type": "grammar",
     "named": false
   },
   {
@@ -1185,11 +1172,11 @@
     "named": true
   },
   {
-    "type": "query",
+    "type": "pub",
     "named": false
   },
   {
-    "type": "schema",
+    "type": "query",
     "named": false
   },
   {

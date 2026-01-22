@@ -1,0 +1,17 @@
+---
+source: crates/planarc/src/lowering/node.rs
+expression: ast
+---
+NodeDefinition {
+    vis: Private,
+    kind: "IncludeDirective" @ Span { start: 5, end: 21, line: 1, col: 6, line_end: 0, col_end: 21 },
+    statements: [
+        Match(
+            MatchStatement {
+                query_ref: Identifier(
+                    "includePattern",
+                ) @ Span { start: 30, end: 44, line: 1, col: 31, line_end: 0, col_end: 44 },
+            } @ Span { start: 24, end: 48, line: 1, col: 25, line_end: 0, col_end: 48 },
+        ) @ Span { start: 24, end: 48, line: 1, col: 25, line_end: 0, col_end: 48 },
+    ],
+} @ Span { start: 0, end: 50, line: 1, col: 1, line_end: 0, col_end: 50 }

@@ -1,12 +1,15 @@
-use std::io::{self, Write};
 use rkyv::rancor::Error;
+use std::io::{self, Write};
 use xxhash_rust::xxh64::xxh64;
 
 use super::header::Header;
 use super::model::Bundle;
 
-pub fn write_bundle(program: &Bundle, writer: &mut impl Write, build_id: Option<u64>) -> io::Result<()> {
-    
+pub fn write_bundle(
+    program: &Bundle,
+    writer: &mut impl Write,
+    build_id: Option<u64>,
+) -> io::Result<()> {
     let bytes = rkyv::to_bytes::<Error>(program)
         .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e.to_string()))?;
 

@@ -4,33 +4,34 @@ expression: ast
 ---
 FactDefinition {
     attributes: [],
+    vis: Private,
     name: "Container" @ Span { start: 18, end: 27, line: 2, col: 18, line_end: 1, col_end: 26 },
     fields: [
         FactField {
             attributes: [],
-            name: "item" @ Span { start: 46, end: 50, line: 3, col: 17, line_end: 2, col_end: 20 },
+            name: "count" @ Span { start: 46, end: 51, line: 3, col: 17, line_end: 2, col_end: 21 },
             ty: TypeAnnotation {
-                name: "String" @ Span { start: 52, end: 58, line: 3, col: 23, line_end: 2, col_end: 28 },
-                refinement: None,
-                args: [
-                    TypeAnnotation {
-                        name: "x" @ Span { start: 59, end: 60, line: 3, col: 30, line_end: 2, col_end: 30 },
-                        refinement: None,
-                        args: [],
-                    } @ Span { start: 59, end: 60, line: 3, col: 30, line_end: 2, col_end: 30 },
-                ],
-            },
-            refinement: None,
-        } @ Span { start: 46, end: 62, line: 3, col: 17, line_end: 3, col_end: 0 },
-        FactField {
-            attributes: [],
-            name: "count" @ Span { start: 78, end: 83, line: 4, col: 17, line_end: 3, col_end: 21 },
-            ty: TypeAnnotation {
-                name: "Int" @ Span { start: 85, end: 88, line: 4, col: 24, line_end: 3, col_end: 26 },
-                refinement: None,
+                name: "Int" @ Span { start: 53, end: 56, line: 3, col: 24, line_end: 2, col_end: 26 },
+                refinement: Some(
+                    Binary {
+                        left: Identifier(
+                            "it",
+                        ) @ Span { start: 63, end: 65, line: 3, col: 34, line_end: 2, col_end: 35 },
+                        op: "in" @ Span { start: 66, end: 77, line: 3, col: 37, line_end: 2, col_end: 47 },
+                        right: InRange {
+                            start: Number(
+                                "1",
+                            ) @ Span { start: 70, end: 71, line: 3, col: 41, line_end: 2, col_end: 41 },
+                            end: Some(
+                                Number(
+                                    "100",
+                                ) @ Span { start: 73, end: 76, line: 3, col: 44, line_end: 2, col_end: 46 },
+                            ),
+                        } @ Span { start: 66, end: 77, line: 3, col: 37, line_end: 2, col_end: 47 },
+                    } @ Span { start: 63, end: 77, line: 3, col: 34, line_end: 2, col_end: 47 },
+                ),
                 args: [],
             },
-            refinement: None,
-        } @ Span { start: 78, end: 103, line: 4, col: 17, line_end: 4, col_end: 0 },
+        } @ Span { start: 46, end: 78, line: 3, col: 17, line_end: 3, col_end: 0 },
     ],
-} @ Span { start: 13, end: 116, line: 2, col: 13, line_end: 4, col_end: 13 }
+} @ Span { start: 13, end: 91, line: 2, col: 13, line_end: 3, col_end: 13 }

@@ -1,9 +1,8 @@
-use std::path::{Path, PathBuf};
 use std::fs;
+use std::path::{Path, PathBuf};
 use std::time::SystemTime;
 
 fn main() {
-    
     let node_types_json = Path::new("tree-sitter-pdl/src/node-types.json");
     let pdl_rs_output = Path::new("src/pdl.rs");
 
@@ -14,7 +13,7 @@ fn main() {
         .into_string();
     fs::write(pdl_rs_output, code).expect("Failed to write pdl.rs");
 
-    println!("cargo:rerun-if-changed=src"); 
+    println!("cargo:rerun-if-changed=src");
 
     let timestamp = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)

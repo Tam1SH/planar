@@ -3,7 +3,6 @@ use std::path::PathBuf;
 
 use crate::{module_loader::Source, pdl};
 
-
 #[derive(Debug, Clone)]
 pub struct CompilationUnit {
     pub source: Source,

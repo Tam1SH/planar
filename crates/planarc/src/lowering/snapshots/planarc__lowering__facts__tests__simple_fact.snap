@@ -4,31 +4,30 @@ expression: ast
 ---
 FactDefinition {
     attributes: [],
+    vis: Private,
     name: "User" @ Span { start: 18, end: 22, line: 2, col: 18, line_end: 1, col_end: 21 },
     fields: [
         FactField {
             attributes: [
                 Attribute {
-                    name: "auto_id" @ Span { start: 42, end: 49, line: 3, col: 18, line_end: 2, col_end: 24 },
-                } @ Span { start: 41, end: 50, line: 3, col: 17, line_end: 3, col_end: 0 },
+                    name: "auto_id" @ Span { start: 43, end: 50, line: 3, col: 18, line_end: 2, col_end: 24 },
+                } @ Span { start: 42, end: 51, line: 3, col: 17, line_end: 2, col_end: 25 },
             ],
-            name: "name" @ Span { start: 66, end: 70, line: 4, col: 17, line_end: 3, col_end: 20 },
+            name: "name" @ Span { start: 51, end: 55, line: 3, col: 26, line_end: 2, col_end: 29 },
             ty: TypeAnnotation {
-                name: "String" @ Span { start: 72, end: 78, line: 4, col: 23, line_end: 3, col_end: 28 },
+                name: "String" @ Span { start: 57, end: 63, line: 3, col: 32, line_end: 2, col_end: 37 },
                 refinement: None,
                 args: [],
             },
-            refinement: None,
-        } @ Span { start: 41, end: 79, line: 3, col: 17, line_end: 4, col_end: 0 },
+        } @ Span { start: 42, end: 65, line: 3, col: 17, line_end: 3, col_end: 0 },
         FactField {
             attributes: [],
-            name: "age" @ Span { start: 95, end: 98, line: 5, col: 17, line_end: 4, col_end: 19 },
+            name: "age" @ Span { start: 81, end: 84, line: 4, col: 17, line_end: 3, col_end: 19 },
             ty: TypeAnnotation {
-                name: "Int" @ Span { start: 100, end: 103, line: 5, col: 22, line_end: 4, col_end: 24 },
+                name: "Int" @ Span { start: 86, end: 89, line: 4, col: 22, line_end: 3, col_end: 24 },
                 refinement: None,
                 args: [],
             },
-            refinement: None,
-        } @ Span { start: 95, end: 104, line: 5, col: 17, line_end: 5, col_end: 0 },
+        } @ Span { start: 81, end: 91, line: 4, col: 17, line_end: 4, col_end: 0 },
     ],
-} @ Span { start: 13, end: 117, line: 2, col: 13, line_end: 5, col_end: 13 }
+} @ Span { start: 13, end: 104, line: 2, col: 13, line_end: 4, col_end: 13 }

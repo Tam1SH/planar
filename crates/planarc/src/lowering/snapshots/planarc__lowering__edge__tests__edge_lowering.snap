@@ -1,0 +1,11 @@
+---
+source: crates/planarc/src/lowering/edge.rs
+expression: ast
+---
+EdgeDefinition {
+    vis: Private,
+    name: "Friend" @ Span { start: 5, end: 11, line: 1, col: 6, line_end: 0, col_end: 11 },
+    from: "User" @ Span { start: 14, end: 18, line: 1, col: 15, line_end: 0, col_end: 18 },
+    to: "User" @ Span { start: 22, end: 26, line: 1, col: 23, line_end: 0, col_end: 26 },
+    relation: "->" @ Span { start: 19, end: 21, line: 1, col: 20, line_end: 0, col_end: 21 },
+} @ Span { start: 0, end: 26, line: 1, col: 1, line_end: 0, col_end: 26 }

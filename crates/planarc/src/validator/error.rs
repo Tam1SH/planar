@@ -5,7 +5,6 @@ use thiserror::Error;
 
 use crate::{compiler::error::ErrorWithLocation, spanned::Location};
 
-
 #[derive(Error, Clone, Debug, Diagnostic)]
 pub enum ValidationError {
     // --- WIT Errors ---
@@ -18,7 +17,7 @@ pub enum ValidationError {
         span: SourceSpan,
         #[source_code]
         src: NamedSource<String>,
-        loc: Location
+        loc: Location,
     },
 
     #[error("Refinements are not allowed in wit-compatible types")]
@@ -28,11 +27,13 @@ pub enum ValidationError {
         span: SourceSpan,
         #[source_code]
         src: NamedSource<String>,
-        loc: Location
+        loc: Location,
     },
 
     // --- Query & Grammar Errors ---
-    #[error("Invalid grammar namespace '{namespace}'. Use 'grammars.' prefix for tree-sitter grammars")]
+    #[error(
+        "Invalid grammar namespace '{namespace}'. Use 'grammars.' prefix for tree-sitter grammars"
+    )]
     #[diagnostic(
         code(pdl::validator::invalid_grammar_namespace),
         help("Example: query myQuery: grammars.nginx = `...`")
@@ -43,7 +44,7 @@ pub enum ValidationError {
         span: SourceSpan,
         #[source_code]
         src: NamedSource<String>,
-        loc: Location
+        loc: Location,
     },
 
     #[error("Grammar '{name}' not found in the loaded dependencies")]
@@ -59,7 +60,7 @@ pub enum ValidationError {
         span: SourceSpan,
         #[source_code]
         src: NamedSource<String>,
-        loc: Location
+        loc: Location,
     },
 
     #[error("Tree-sitter query syntax error: {message}")]
@@ -70,10 +71,9 @@ pub enum ValidationError {
         span: SourceSpan,
         #[source_code]
         src: NamedSource<String>,
-        loc: Location
-    }
+        loc: Location,
+    },
 }
-
 
 #[derive(Clone, Error, Diagnostic)]
 #[error("Found {} linker errors", .0.len())]
@@ -92,7 +92,6 @@ impl ErrorWithLocation for ValidationError {
 }
 
 impl ValidationErrors {
-
     pub fn new(errors: Vec<ValidationError>) -> Self {
         Self(errors)
     }

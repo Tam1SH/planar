@@ -53,7 +53,7 @@ mod tests {
             }
         "#;
         let mut reg = VarRegistry::new();
-        reg.vars.insert("val".to_string(),  val.to_string());
+        reg.vars.insert("val".to_string(), val.to_string());
 
         let ctx = ParseContext::new_with_registry(
             input.parse::<KdlDocument>().unwrap().into(),

@@ -2,8 +2,7 @@ use proc_macro2::TokenStream;
 use quote::quote;
 
 use crate::node_parser::model::{
-    ArgSpec, BlockSpec, ChildSpec, NodeModel, NodeModelKind, PropSpec, VariantFields,
-    VariantSpec,
+    ArgSpec, BlockSpec, ChildSpec, NodeModel, NodeModelKind, PropSpec, VariantFields, VariantSpec,
 };
 
 pub struct SchemaGenerator<'a> {
@@ -33,13 +32,15 @@ impl<'a> SchemaGenerator<'a> {
     }
 
     fn gen_struct_schema(&self) -> TokenStream {
-        
         let matcher = self.gen_matcher(
             self.model.kdl_name.as_deref(),
             self.model.node_name_field.as_ref().map(|n| &n.base),
         );
 
-        let type_id = self.model.kdl_name.as_ref()
+        let type_id = self
+            .model
+            .kdl_name
+            .as_ref()
             .cloned()
             .unwrap_or_else(|| self.model.struct_name.to_string());
 
@@ -50,7 +51,7 @@ impl<'a> SchemaGenerator<'a> {
 
         quote! {
             {
-                let id = #type_id; 
+                let id = #type_id;
                 if !ctx.enter(id) {
                     return vec![crate::schema::definitions::NodeSchema {
                         matcher: #matcher,
@@ -72,7 +73,7 @@ impl<'a> SchemaGenerator<'a> {
                         children: #children,
                     }
                 ];
-            
+
                 ctx.exit();
                 res
             }

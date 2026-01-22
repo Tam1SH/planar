@@ -145,10 +145,7 @@ impl<'a> EnumGenerator<'a> {
         let struct_name = &self.model.struct_name;
         let count = self.variants.len();
 
-        let calcs = self
-            .variants
-            .iter()
-            .map(ScoreGenerator::gen_variant_score);
+        let calcs = self.variants.iter().map(ScoreGenerator::gen_variant_score);
 
         quote! {
             impl #struct_name {

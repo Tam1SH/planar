@@ -1,6 +1,4 @@
 ; Keywords
-"schema" @keyword
-"grammar" @keyword
 "import" @keyword
 "match" @keyword
 "where" @keyword
@@ -56,8 +54,6 @@
 
 (#set! injection.language "query")
 
-(header name: (string) @string.special) ; Schema name is special
-
 (graph_bind
   (graph_left_statements
     (identifier) @variable.builtin
@@ -68,7 +64,7 @@
 
 ; Literals
 (string) @string
-(raw_string) @string
+(query_literal) @string
 ; (boolean) @boolean
 ; (number) @number.decimal
 

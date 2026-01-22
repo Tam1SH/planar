@@ -3,6 +3,7 @@ source: crates/planarc/src/lowering/type_decl.rs
 expression: ast
 ---
 TypeDeclaration {
+    vis: Private,
     attributes: [],
     name: "UserID" @ Span { start: 5, end: 11, line: 1, col: 6, line_end: 0, col_end: 11 },
     definition: TypeDefinition {

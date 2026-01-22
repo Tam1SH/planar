@@ -3,6 +3,7 @@ source: crates/planarc/src/lowering/type_decl.rs
 expression: ast
 ---
 TypeDeclaration {
+    vis: Private,
     attributes: [],
     name: "ParsableInt" @ Span { start: 5, end: 16, line: 1, col: 6, line_end: 0, col_end: 16 },
     definition: TypeDefinition {
@@ -19,7 +20,7 @@ TypeDeclaration {
                                 "it",
                             ) @ Span { start: 43, end: 45, line: 1, col: 44, line_end: 0, col_end: 45 },
                         ],
-                    } @ Span { start: 26, end: 45, line: 1, col: 27, line_end: 0, col_end: 45 },
+                    } @ Span { start: 32, end: 45, line: 1, col: 33, line_end: 0, col_end: 45 },
                 ),
                 args: [],
             },

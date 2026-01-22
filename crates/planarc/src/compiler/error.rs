@@ -1,9 +1,8 @@
 use miette::Diagnostic;
-use thiserror::Error;
 use std::fmt;
+use thiserror::Error;
 
 use crate::spanned::Location;
-
 
 pub trait ErrorWithLocation {
     fn location(&self) -> Location;
@@ -15,12 +14,9 @@ impl<T: Diagnostic + ErrorWithLocation> DiagnosticWithLocation for T {}
 
 #[derive(Error, Default)]
 #[error("Compilation failed with {} errors", .0.len())]
-pub struct CompilersError(
-    pub Vec<Box<dyn DiagnosticWithLocation + Send + Sync + 'static>>
-);
+pub struct CompilersError(pub Vec<Box<dyn DiagnosticWithLocation + Send + Sync + 'static>>);
 
 impl CompilersError {
-    
     pub fn push<E>(&mut self, error: E)
     where
         E: DiagnosticWithLocation + Send + Sync + 'static,
@@ -43,7 +39,6 @@ impl CompilersError {
 }
 
 impl Diagnostic for CompilersError {
-    
     fn related<'a>(&'a self) -> Option<Box<dyn Iterator<Item = &'a dyn Diagnostic> + 'a>> {
         if self.0.is_empty() {
             None

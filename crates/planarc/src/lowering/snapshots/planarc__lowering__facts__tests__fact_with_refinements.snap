@@ -4,37 +4,69 @@ expression: ast
 ---
 FactDefinition {
     attributes: [],
+    vis: Private,
     name: "Product" @ Span { start: 18, end: 25, line: 2, col: 18, line_end: 1, col_end: 24 },
     fields: [
         FactField {
             attributes: [],
-            name: "price" @ Span { start: 44, end: 49, line: 3, col: 17, line_end: 2, col_end: 21 },
+            name: "price" @ Span { start: 45, end: 50, line: 3, col: 17, line_end: 2, col_end: 21 },
             ty: TypeAnnotation {
-                name: "Float" @ Span { start: 51, end: 56, line: 3, col: 24, line_end: 2, col_end: 28 },
-                refinement: None,
+                name: "Float" @ Span { start: 52, end: 57, line: 3, col: 24, line_end: 2, col_end: 28 },
+                refinement: Some(
+                    Binary {
+                        left: Identifier(
+                            "it",
+                        ) @ Span { start: 64, end: 66, line: 3, col: 36, line_end: 2, col_end: 37 },
+                        op: ">" @ Span { start: 67, end: 68, line: 3, col: 39, line_end: 2, col_end: 39 },
+                        right: Call {
+                            function: Number(
+                                "0",
+                            ) @ Span { start: 69, end: 70, line: 3, col: 41, line_end: 2, col_end: 41 },
+                            args: [
+                                Number(
+                                    "0",
+                                ) @ Span { start: 71, end: 72, line: 3, col: 43, line_end: 2, col_end: 43 },
+                            ],
+                        } @ Span { start: 69, end: 72, line: 3, col: 41, line_end: 2, col_end: 43 },
+                    } @ Span { start: 64, end: 72, line: 3, col: 36, line_end: 2, col_end: 43 },
+                ),
                 args: [],
             },
-            refinement: None,
-        } @ Span { start: 44, end: 65, line: 3, col: 17, line_end: 3, col_end: 0 },
+        } @ Span { start: 45, end: 74, line: 3, col: 17, line_end: 3, col_end: 0 },
         FactField {
             attributes: [],
-            name: "tags" @ Span { start: 81, end: 85, line: 4, col: 17, line_end: 3, col_end: 20 },
+            name: "tags" @ Span { start: 90, end: 94, line: 4, col: 17, line_end: 3, col_end: 20 },
             ty: TypeAnnotation {
-                name: "List" @ Span { start: 87, end: 91, line: 4, col: 23, line_end: 3, col_end: 26 },
+                name: "List" @ Span { start: 96, end: 100, line: 4, col: 23, line_end: 3, col_end: 26 },
                 refinement: None,
                 args: [],
             },
-            refinement: None,
-        } @ Span { start: 81, end: 136, line: 4, col: 17, line_end: 4, col_end: 0 },
+        } @ Span { start: 90, end: 110, line: 4, col: 17, line_end: 4, col_end: 0 },
         FactField {
             attributes: [],
-            name: "reliability" @ Span { start: 152, end: 163, line: 5, col: 17, line_end: 4, col_end: 27 },
+            name: "count" @ Span { start: 126, end: 131, line: 5, col: 17, line_end: 4, col_end: 21 },
             ty: TypeAnnotation {
-                name: "Float" @ Span { start: 165, end: 170, line: 5, col: 30, line_end: 4, col_end: 34 },
-                refinement: None,
+                name: "Int" @ Span { start: 133, end: 136, line: 5, col: 24, line_end: 4, col_end: 26 },
+                refinement: Some(
+                    Binary {
+                        left: Identifier(
+                            "it",
+                        ) @ Span { start: 143, end: 145, line: 5, col: 34, line_end: 4, col_end: 35 },
+                        op: "in" @ Span { start: 146, end: 157, line: 5, col: 37, line_end: 4, col_end: 47 },
+                        right: InRange {
+                            start: Number(
+                                "1",
+                            ) @ Span { start: 150, end: 151, line: 5, col: 41, line_end: 4, col_end: 41 },
+                            end: Some(
+                                Number(
+                                    "100",
+                                ) @ Span { start: 153, end: 156, line: 5, col: 44, line_end: 4, col_end: 46 },
+                            ),
+                        } @ Span { start: 146, end: 157, line: 5, col: 37, line_end: 4, col_end: 47 },
+                    } @ Span { start: 143, end: 157, line: 5, col: 34, line_end: 4, col_end: 47 },
+                ),
                 args: [],
             },
-            refinement: None,
-        } @ Span { start: 152, end: 186, line: 5, col: 17, line_end: 5, col_end: 0 },
+        } @ Span { start: 126, end: 159, line: 5, col: 17, line_end: 5, col_end: 0 },
     ],
-} @ Span { start: 13, end: 199, line: 2, col: 13, line_end: 5, col_end: 13 }
+} @ Span { start: 13, end: 172, line: 2, col: 13, line_end: 5, col_end: 13 }

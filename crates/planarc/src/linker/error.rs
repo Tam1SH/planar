@@ -6,6 +6,21 @@ use crate::{compiler::error::ErrorWithLocation, spanned::Location};
 
 #[derive(Clone, Debug, Error, Diagnostic)]
 pub enum LinkerError {
+    #[error("Access violation: symbol '{name}' is {reason}")]
+    #[diagnostic(
+        code(pdl::linker::access_violation),
+        help("This symbol is private or internal. Use 'pub' to export it if needed.")
+    )]
+    AccessViolation {
+        name: String,
+        reason: String,
+        #[source_code]
+        src: NamedSource<String>,
+        #[label("access to this symbol is restricted")]
+        span: SourceSpan,
+        loc: Location,
+    },
+
     #[error("Symbol collision: '{name}' is already defined")]
     #[diagnostic(code(pdl::linker::symbol_collision))]
     SymbolCollision {
@@ -39,15 +54,35 @@ pub enum LinkerError {
     #[diagnostic(code(pdl::linker::ambiguous_reference))]
     AmbiguousReference {
         name: String,
-        
+
         #[source_code]
         src: NamedSource<String>,
-        
+
         #[label("ambiguous usage")]
         span: SourceSpan,
 
         #[related]
         candidates: Vec<AmbiguousCandidate>,
+        loc: Location,
+    },
+
+    #[error("Invalid symbol kind: '{name}' is a {found}, but a {expected} was expected here")]
+    #[diagnostic(
+        code(pdl::linker::invalid_symbol_kind),
+        help(
+            "Check if you are using a variable where a definition name is required, or vice-versa."
+        )
+    )]
+    InvalidSymbolKind {
+        name: String,
+        expected: String,
+        found: String,
+
+        #[source_code]
+        src: NamedSource<String>,
+
+        #[label("expected {expected}, found {found}")]
+        span: SourceSpan,
         loc: Location,
     },
 }
@@ -80,19 +115,19 @@ pub struct PreviousDefinition {
 #[error("Found {} linker errors", .0.len())]
 pub struct LinkerErrors(#[related] pub Vec<LinkerError>);
 
-
 impl ErrorWithLocation for LinkerError {
     fn location(&self) -> Location {
         match self {
             LinkerError::SymbolCollision { loc, .. } => *loc,
             LinkerError::UnknownSymbol { loc, .. } => *loc,
             LinkerError::AmbiguousReference { loc, .. } => *loc,
+            LinkerError::InvalidSymbolKind { loc, .. } => *loc,
+            LinkerError::AccessViolation { loc, .. } => *loc,
         }
     }
 }
 
 impl LinkerErrors {
-
     pub fn new(errors: Vec<LinkerError>) -> Self {
         Self(errors)
     }
@@ -111,7 +146,6 @@ impl fmt::Debug for LinkerErrors {
         fmt::Debug::fmt(&miette::Report::new(self.clone()), f)
     }
 }
-
 
 #[derive(Debug, Error, Diagnostic)]
 pub enum GraphError {
@@ -140,17 +174,19 @@ pub enum GraphError {
         #[related]
         cycle_path: Vec<CycleStep>,
     },
-    
+
     #[error("Duplicate module definition: '{fqmn}'")]
-        #[diagnostic(
+    #[diagnostic(
         code(pdl::dependencies::duplicate_module),
-        help("The module '{fqmn}' is defined in multiple files:\n  1. {path1}\n  2. {path2}\nRename one of them or check your source roots.")
+        help(
+            "The module '{fqmn}' is defined in multiple files:\n  1. {path1}\n  2. {path2}\nRename one of them or check your source roots."
+        )
     )]
     DuplicateModule {
         fqmn: String,
         path1: String,
         path2: String,
-    }
+    },
 }
 
 #[derive(Debug, Error, Diagnostic)]

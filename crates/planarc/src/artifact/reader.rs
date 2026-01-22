@@ -1,7 +1,7 @@
+use rkyv::Archived;
 use std::io;
 use thiserror::Error;
 use xxhash_rust::xxh64::xxh64;
-use rkyv::Archived;
 
 use crate::artifact::header::COMPILER_BUILDID;
 use crate::artifact::model::ArchivedBundle;
@@ -33,7 +33,6 @@ pub fn load_bundle<'a>(
     data: &'a [u8],
     build_id: Option<u64>,
 ) -> Result<LoadedBundle<'a>, LoadError> {
-    
     let build_id = build_id.unwrap_or(COMPILER_BUILDID);
 
     if data.len() < 24 {
@@ -43,19 +42,17 @@ pub fn load_bundle<'a>(
     let (header_bytes, payload) = data.split_at(24);
     let header = Header::from_bytes(header_bytes.try_into().unwrap());
 
-    
     if &header.magic != MAGIC {
         return Err(LoadError::InvalidMagic(header.magic));
     }
 
-    
     if header.version != VERSION {
         return Err(LoadError::VersionMismatch {
             file: header.version,
             runtime: VERSION,
         });
     }
-    
+
     if header.build_id != build_id {
         return Err(LoadError::BuildIdMismatch {
             expected: build_id,

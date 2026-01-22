@@ -16,8 +16,7 @@ impl<'a> Ctx<'a> {
 
     pub fn spanned<T>(&self, node: &impl Node<'a>, value: T) -> Spanned<T> {
         let range = node.range();
-        
-        
+
         let span = Span::new(
             range.start_byte,
             range.end_byte,

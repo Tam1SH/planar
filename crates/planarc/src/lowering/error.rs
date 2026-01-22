@@ -1,8 +1,13 @@
+use crate::{
+    compiler::error::{DiagnosticWithLocation, ErrorWithLocation},
+    lowering::ctx::Ctx,
+    module_loader::Source,
+    spanned::Location,
+};
 use miette::{Diagnostic, NamedSource, SourceSpan};
+use std::fmt;
 use thiserror::Error;
 use type_sitter::{Node, UntypedNode};
-use std::fmt;
-use crate::{compiler::error::{DiagnosticWithLocation, ErrorWithLocation}, lowering::ctx::Ctx, module_loader::Source, spanned::Location};
 
 #[derive(Clone, Debug, Error, Diagnostic)]
 pub enum LoweringError {
@@ -11,10 +16,10 @@ pub enum LoweringError {
     UnexpectedKind {
         #[source_code]
         src: NamedSource<String>,
-        
+
         #[label("expected {expected}")]
         span: SourceSpan,
-        
+
         loc: Location,
 
         expected: String,
@@ -26,8 +31,8 @@ pub enum LoweringError {
     SyntaxError {
         #[source_code]
         src: NamedSource<String>,
-        
-        loc: Location, 
+
+        loc: Location,
 
         #[label("here")]
         span: SourceSpan,
@@ -38,29 +43,26 @@ pub enum LoweringError {
 
 #[derive(Clone, Error, Diagnostic)]
 #[error("Found {} lowering errors", .0.len())]
-pub struct LoweringErrors(
-    #[related]
-    pub Vec<LoweringError>
-);
+pub struct LoweringErrors(#[related] pub Vec<LoweringError>);
 
 impl ErrorWithLocation for LoweringError {
     fn location(&self) -> Location {
         match &self {
-            LoweringError::UnexpectedKind { loc, .. } => loc.clone(),
-            LoweringError::SyntaxError { loc, .. } => loc.clone(),
+            LoweringError::UnexpectedKind { loc, .. } => *loc,
+            LoweringError::SyntaxError { loc, .. } => *loc,
         }
     }
-} 
+}
 
 impl LoweringErrors {
     pub fn new(errors: Vec<LoweringError>) -> Self {
         Self(errors)
     }
-    
+
     pub fn is_empty(&self) -> bool {
         self.0.is_empty()
     }
-    
+
     pub fn merge(&mut self, other: Self) {
         self.0.extend(other.0);
     }
@@ -73,17 +75,20 @@ impl fmt::Debug for LoweringErrors {
 }
 
 impl LoweringError {
-    
-    pub fn from_incorrect_kind(err: type_sitter::IncorrectKind<'_>, source: &Source, ctx: &Ctx<'_>) -> Self {
+    pub fn from_incorrect_kind(
+        err: type_sitter::IncorrectKind<'_>,
+        source: &Source,
+        ctx: &Ctx<'_>,
+    ) -> Self {
         let node = err.node;
         let range = node.range();
-        
+
         Self::UnexpectedKind {
             src: NamedSource::new(source.origin.clone(), source.content.clone()),
             span: SourceSpan::new(range.start_byte.into(), range.end_byte - range.start_byte),
             expected: err.kind.to_string(),
             found: node.kind().to_string(),
-            loc: ctx.location(&node)
+            loc: ctx.location(&node),
         }
     }
 
@@ -100,11 +105,11 @@ impl LoweringError {
             } else {
                 full_text.to_string()
             };
-            
+
             if display_text.trim().is_empty() {
-                 format!("unexpected token '{}' (or end of file)", node.kind())
+                format!("unexpected token '{}' (or end of file)", node.kind())
             } else {
-                 format!("unexpected token '{}'", display_text)
+                format!("unexpected token '{}'", display_text)
             }
         };
 
@@ -112,13 +117,11 @@ impl LoweringError {
             src: NamedSource::new(source.origin.clone(), source.content.clone()),
             span: SourceSpan::new(range.start_byte.into(), range.end_byte - range.start_byte),
             message,
-            loc: ctx.location(&UntypedNode::new(node))
+            loc: ctx.location(&UntypedNode::new(node)),
         }
     }
 
-    
     pub fn collect_from_tree(root: tree_sitter::Node, source: &Source, ctx: &Ctx<'_>) -> Vec<Self> {
-        
         let mut errors = Vec::new();
         let mut cursor = root.walk();
         recursive_find_errors(&mut cursor, source, &mut errors, ctx);
@@ -126,24 +129,23 @@ impl LoweringError {
     }
 }
 
-
 fn recursive_find_errors(
-    cursor: &mut tree_sitter::TreeCursor, 
-    source: &Source, 
+    cursor: &mut tree_sitter::TreeCursor,
+    source: &Source,
     errors: &mut Vec<LoweringError>,
-    ctx: &Ctx<'_>
+    ctx: &Ctx<'_>,
 ) {
     let node = cursor.node();
 
     if node.is_missing() {
-        errors.push(LoweringError::syntax_error(node, source, ctx)); 
+        errors.push(LoweringError::syntax_error(node, source, ctx));
         return;
     }
 
     if node.is_error() {
         if cursor.goto_first_child() {
             let mut found_child_error = false;
-            
+
             loop {
                 let child = cursor.node();
                 if child.is_error() || child.is_missing() || child.has_error() {
@@ -153,7 +155,7 @@ fn recursive_find_errors(
                         found_child_error = true;
                     }
                 }
-                
+
                 if !cursor.goto_next_sibling() {
                     break;
                 }

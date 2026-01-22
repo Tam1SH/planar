@@ -1,8 +1,7 @@
-
-use std::collections::HashMap;
-use std::fs;
 use anyhow::Context;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+use std::fs;
 
 #[derive(Serialize, Deserialize, Default)]
 struct Settings {

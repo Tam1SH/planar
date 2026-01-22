@@ -246,9 +246,7 @@ mod tests {
 
         let locator = NodeLocator::new(generator.clone());
 
-        let found_range = locator
-            .locate(&tree, source, &stable_id)
-            .unwrap();
+        let found_range = locator.locate(&tree, source, &stable_id).unwrap();
 
         assert_eq!(found_range, node_42.range());
         assert_eq!(&source[found_range.start_byte..found_range.end_byte], b"42");

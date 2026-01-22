@@ -21,14 +21,13 @@ export default grammar({
     [$._type_primary, $.type_application],
     [$.type_application],
     [$.refinement],
-    [$._expression, $.operator_section]
   ],
 
   rules: {
 
     source_file: $ => seq(
       repeat(choice(
-        field('header', $.header),
+        $.edge_definition,
         $.query_definition,
         $.node_definition, 
         $.extern_definition,
@@ -39,7 +38,26 @@ export default grammar({
       ))
     ),
 
+    pub: _ => seq('pub', optional(field('pkg', '(pkg)'))),
+
+    node_definition: $ => seq(
+      optional($.pub),
+      'node',
+      field('kind', $.fqmn),
+      $.block
+    ),
+    edge_definition: $ => seq(
+      optional($.pub),
+      'edge',
+      field('name', $.identifier),
+      '=',
+      field('from', $.type_identifier),
+      $.relation,
+      field('to', $.type_identifier),
+    ),
+
     query_definition: $ => seq(
+      optional($.pub),
       'query',
       field('name', $.identifier),
       ':',
@@ -47,6 +65,38 @@ export default grammar({
       '=',
       field('value', $.query_literal)
     ),
+
+    type_declaration: $ => seq(
+      repeat($.attribute),
+      optional($.pub),
+      'type',
+      field('name', $.identifier),
+      '=',
+      field('body', $.type_definition),
+      $._newline
+    ),
+
+
+    fact_definition: $ => seq(
+      repeat($.attribute),
+      optional($.pub),
+      'fact', field('name', $.identifier),
+      '{',
+      repeat(choice($.fact_field_definition, $._newline)),
+      '}'
+    ),
+
+    import_definition: $ => seq(
+      'import',
+      $.fqmn
+    ),
+
+    extern_definition: $ => seq(
+      field('attributes', repeat($.attribute)),
+      optional($.pub),
+      'extern',
+      field('block', $.extern_block)
+    ),  
 
     query_literal: $ => seq(
       '`',
@@ -59,32 +109,8 @@ export default grammar({
       $._newline
     ),
 
-    // schema "docker-compose" grammar="yaml"
-    header: $ => seq(
-      'schema',
-      field('name', $.string),
-      'grammar',
-      '=',
-      field('grammar_ref', $.string)
-    ),
-    
 
-    fact_definition: $ => seq(
-      repeat($.attribute),
-      'fact', field('name', $.identifier),
-      '{',
-      repeat(choice($.fact_field_definition, $._newline)),
-      '}'
-    ),
 
-    type_declaration: $ => seq(
-      repeat($.attribute),
-      'type',
-      field('name', $.identifier),
-      '=',
-      field('body', $.type_definition),
-      $._newline
-    ),
 
     type_definition: $ => choice(
       field('type', $.type_annotation),
@@ -146,7 +172,6 @@ export default grammar({
       $.string,
       $.operator_identifier,
       $.in_expression,
-      $.operator_section,
       $.parenthesized_expression
     ),
 
@@ -158,12 +183,6 @@ export default grammar({
 
     it: _ => field('it', 'it'),
     
-    operator_section: $ => seq(
-      '(',
-      field('operator', $.operator_identifier),
-      $._expression,
-      ')'
-    ),
 
     list_items: $ => commaSep1($._expression),
     
@@ -196,16 +215,7 @@ export default grammar({
     )),
     
 
-    import_definition: $ => seq(
-      'import',
-      $.fqmn
-    ),
 
-    extern_definition: $ => seq(
-      field('attributes', repeat($.attribute)),
-      'extern',
-      field('block', $.extern_block)
-    ),  
 
     extern_def_fn: $ => seq(
       choice(
@@ -236,11 +246,7 @@ export default grammar({
       '}'
     ),
     
-    node_definition: $ => seq(
-      'node',
-      field('kind', $.fqmn),
-      $.block
-    ),
+
 
     
     block: $ => seq(
@@ -256,7 +262,7 @@ export default grammar({
 
     match_stmt: $ => seq(
       'match',
-      field('query', choice($.raw_string, $.identifier)),
+      field('query', choice($.query_literal, $.identifier)),
       $.match_block
     ),
 
@@ -294,9 +300,11 @@ export default grammar({
       $._newline,
     ),
 
+    relation: _ => choice('<-', '->', '<->'),
+
     graph_bind: $ => seq(
       field('left', $.graph_left_statements),
-      field('relation', choice('<-', '->', '<->')),
+      field('relation', $.relation),
       field('right', $.graph_right_statements)
     ),
 

@@ -1,6 +1,5 @@
 use crate::schema::definitions::ValueKind;
 
-
 pub trait KdlValueInfo {
     fn value_kind() -> ValueKind;
 }

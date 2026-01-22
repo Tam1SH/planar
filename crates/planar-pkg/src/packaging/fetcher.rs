@@ -1,15 +1,15 @@
-use std::collections::HashMap;
-use std::path::{Path, PathBuf};
-use std::process::Command;
-use anyhow::{anyhow, Context};
-use futures_util::StreamExt;
-use serde::{Deserialize, Serialize};
-use sha2::{Digest, Sha256};
-use tracing::{debug, info, instrument, warn};
 use crate::model::planardl::{DependencyItemDef, DependencyItemDefData, GrammarItemDefData};
 use crate::packaging::resolver::{DependencyKind, ResolverProgress};
 use crate::packaging::target_info::TargetInfo;
+use anyhow::{Context, anyhow};
+use futures_util::StreamExt;
+use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha256};
+use std::collections::HashMap;
+use std::path::{Path, PathBuf};
+use std::process::Command;
 use tokio::io::AsyncWriteExt;
+use tracing::{debug, info, instrument, warn};
 
 pub enum ResolvedSource {
     Local(PathBuf),
@@ -26,9 +26,9 @@ impl ResolvedSource {
 }
 
 #[derive(Deserialize, Serialize)]
-pub struct RegistryManifest { 
-    #[serde(default)] 
-    pub generated_at: Option<String>, 
+pub struct RegistryManifest {
+    #[serde(default)]
+    pub generated_at: Option<String>,
     pub files: HashMap<String, String>,
 }
 
@@ -37,22 +37,20 @@ pub struct PackageFetcher {
 }
 
 impl PackageFetcher {
-
     pub fn new(cache_root: PathBuf) -> Self {
         Self { cache_root }
     }
 
     #[instrument(skip(self, item, base_path, registry_manifest, progress), fields(grammar = %name))]
     pub async fn fetch_grammar(
-        &self, 
-        name: &str, 
-        item: &GrammarItemDefData, 
-        base_path: &Path, 
+        &self,
+        name: &str,
+        item: &GrammarItemDefData,
+        base_path: &Path,
         registry_url: &str,
         registry_manifest: Option<&RegistryManifest>,
-        progress: &dyn ResolverProgress
+        progress: &dyn ResolverProgress,
     ) -> anyhow::Result<PathBuf> {
-        
         if let Some(path_str) = &item.path {
             debug!(path = %path_str, "Using local grammar path");
             progress.on_resolved(name, "local", DependencyKind::Grammar, true);
@@ -71,28 +69,38 @@ impl PackageFetcher {
             return Ok(dest_path);
         }
 
-        
         debug!(registry = %registry_url, "Searching grammar in registry");
         let manifest = match registry_manifest {
             Some(m) => m,
             None => {
                 let client = reqwest::Client::new();
-                &client.get(format!("{}/manifest.json", registry_url))
-                    .send().await?
-                    .json::<RegistryManifest>().await?
+                &client
+                    .get(format!("{}/manifest.json", registry_url))
+                    .send()
+                    .await?
+                    .json::<RegistryManifest>()
+                    .await?
             }
         };
 
-        let expected_hash = manifest.files.get(&target_filename)
+        let expected_hash = manifest
+            .files
+            .get(&target_filename)
             .ok_or_else(|| anyhow!("Grammar '{}' not found in registry for your platform", name))?;
 
         let is_valid = if dest_path.exists() {
             if let Some(manifest) = registry_manifest {
                 if let Some(expected_hash) = manifest.files.get(&target_filename) {
                     Self::verify_hash(&dest_path, expected_hash)
-                } else { false }
-            } else { true }
-        } else { false };
+                } else {
+                    false
+                }
+            } else {
+                true
+            }
+        } else {
+            false
+        };
 
         if is_valid {
             progress.on_resolved(name, "cached", DependencyKind::Grammar, false);
@@ -113,12 +121,11 @@ impl PackageFetcher {
 
     #[instrument(skip(self, base_path, progress), fields(dep = %dep.name))]
     pub fn fetch(
-        &self, 
-        dep: &DependencyItemDefData, 
+        &self,
+        dep: &DependencyItemDefData,
         base_path: &Path,
-        progress: &dyn ResolverProgress
+        progress: &dyn ResolverProgress,
     ) -> anyhow::Result<ResolvedSource> {
-        
         if let Some(path_str) = &dep.path {
             let path = base_path.join(path_str).canonicalize()?;
             progress.on_resolved(&dep.name, "local", DependencyKind::Package, true);
@@ -126,9 +133,16 @@ impl PackageFetcher {
         }
 
         if let Some(url) = &dep.git {
-            let rev = dep.tag.as_deref().or(dep.branch.as_deref()).unwrap_or("main");
-            
-            let sanitized_url = url.replace("https://", "").replace("://", "/").replace(":", "/");
+            let rev = dep
+                .tag
+                .as_deref()
+                .or(dep.branch.as_deref())
+                .unwrap_or("main");
+
+            let sanitized_url = url
+                .replace("https://", "")
+                .replace("://", "/")
+                .replace(":", "/");
             let target_dir = self.cache_root.join(sanitized_url).join(rev);
 
             if target_dir.exists() {
@@ -161,7 +175,8 @@ impl PackageFetcher {
             tokio::fs::create_dir_all(parent).await?;
         }
 
-        let response = reqwest::get(url).await?
+        let response = reqwest::get(url)
+            .await?
             .error_for_status()
             .context(format!("Failed to request grammar from {}", url))?;
 
@@ -194,7 +209,7 @@ impl PackageFetcher {
             .arg(dest)
             .status()
             .context("Failed to execute git command. Is git installed?")?;
-        
+
         if status.success() {
             Ok(())
         } else {
@@ -203,7 +218,6 @@ impl PackageFetcher {
         }
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -217,16 +231,20 @@ mod tests {
 
     fn setup_test_git_repo(dir: &Path) {
         let run = |args: &[&str]| {
-            let status = Command::new("git").args(args).current_dir(dir).status().unwrap();
+            let status = Command::new("git")
+                .args(args)
+                .current_dir(dir)
+                .status()
+                .unwrap();
             assert!(status.success());
         };
 
         run(&["init"]);
         run(&["config", "user.email", "test@planar.lang"]);
         run(&["config", "user.name", "Test Runner"]);
-        
+
         fs::write(dir.join("planar.kdl"), "package { name \"my-lib\" }").unwrap();
-        
+
         run(&["add", "."]);
         run(&["commit", "-m", "initial commit"]);
         run(&["tag", "v0.1.0"]);
@@ -235,15 +253,13 @@ mod tests {
     #[tokio::test]
     async fn test_git_fetch_vendor_agnostic() {
         let tmp = TempDir::new().unwrap();
-        
-        
+
         let remote_dir = tmp.path().join("remote_server/repo");
         fs::create_dir_all(&remote_dir).unwrap();
         setup_test_git_repo(&remote_dir);
-        
+
         let remote_url = format!("file://{}", remote_dir.to_str().unwrap());
 
-        
         let cache_dir = tmp.path().join("cache");
         let fetcher = PackageFetcher::new(cache_dir);
 
@@ -255,12 +271,14 @@ mod tests {
             tag: Some("v0.1.0".to_string()),
         };
 
-        let result = fetcher.fetch(&dep, tmp.path(), &NoOpProgress).expect("Should fetch from local file:// url");
-        
+        let result = fetcher
+            .fetch(&dep, tmp.path(), &NoOpProgress)
+            .expect("Should fetch from local file:// url");
+
         assert!(result.path().exists());
         assert!(result.path().join("planar.kdl").exists());
         assert!(matches!(result, ResolvedSource::Cached(_)));
-        
+
         let path_str = result.path().to_string_lossy();
         assert!(path_str.contains("remote_server/repo/v0.1.0"));
     }
@@ -277,16 +295,23 @@ mod tests {
         let filename = TargetInfo::format_grammar_name(grammar_name);
 
         // Mock Manifest
-        Mock::given(method("GET")).and(path("/manifest.json"))
+        Mock::given(method("GET"))
+            .and(path("/manifest.json"))
             .respond_with(ResponseTemplate::new(200).set_body_json(RegistryManifest {
                 generated_at: Default::default(),
-                files: [(filename.clone(), hash)].into_iter().collect()
-            })).mount(&server).await;
+                files: [(filename.clone(), hash)].into_iter().collect(),
+            }))
+            .mount(&server)
+            .await;
 
         // Mock Binary
-        Mock::given(method("GET")).and(path(format!("/{}", filename)))
-            .respond_with(ResponseTemplate::new(200).set_body_raw(binary_data, "application/octet-stream"))
-            .mount(&server).await;
+        Mock::given(method("GET"))
+            .and(path(format!("/{}", filename)))
+            .respond_with(
+                ResponseTemplate::new(200).set_body_raw(binary_data, "application/octet-stream"),
+            )
+            .mount(&server)
+            .await;
 
         let item = GrammarItemDefData {
             name: grammar_name.to_string(),
@@ -294,9 +319,17 @@ mod tests {
             url: None,
         };
 
-        let path = fetcher.fetch_grammar(
-            grammar_name, &item, tmp.path(), &server.uri(), None, &NoOpProgress
-        ).await.expect("Failed to fetch grammar");
+        let path = fetcher
+            .fetch_grammar(
+                grammar_name,
+                &item,
+                tmp.path(),
+                &server.uri(),
+                None,
+                &NoOpProgress,
+            )
+            .await
+            .expect("Failed to fetch grammar");
 
         assert!(path.exists());
         assert_eq!(fs::read(path).unwrap(), b"precompiled-binary-content");
@@ -306,11 +339,10 @@ mod tests {
     async fn test_url_template_resolution() {
         let tmp = TempDir::new().unwrap();
         let fetcher = PackageFetcher::new(tmp.path().join("cache"));
-        
+
         let template = "https://example.com/{os}/{arch}/parser.{ext}";
         let resolved = fetcher.resolve_url_templates(template);
-        
-        
+
         assert!(resolved.contains(TargetInfo::os()));
         assert!(resolved.contains(TargetInfo::arch()));
         assert!(resolved.contains(TargetInfo::ext()));

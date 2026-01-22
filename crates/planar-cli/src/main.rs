@@ -2,16 +2,14 @@ use std::path::PathBuf;
 
 use anyhow::anyhow;
 use clap::{Parser, Subcommand};
-use console::{style, Emoji};
+use console::{Emoji, style};
 use tracing_subscriber::EnvFilter;
 
-
-mod settings;
-mod init;
 mod build;
 mod global;
+mod init;
 mod inspect;
-
+mod settings;
 
 static LOOKING_GLASS: Emoji<'_, '_> = Emoji("🔍 ", "");
 
@@ -25,7 +23,6 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    
     /// Initialize a new Planar project
     Init {
         /// Project name (optional, defaults to current directory)
@@ -36,11 +33,10 @@ enum Commands {
         /// Path to the project root
         #[arg(default_value = ".")]
         path: PathBuf,
-        
+
         /// Verbosity level: -v (DEBUG), -vv (TRACE)
         #[arg(short, long, action = clap::ArgAction::Count)]
         verbose: u8,
-
     },
 
     /// Manage global configuration
@@ -70,16 +66,18 @@ async fn main() -> anyhow::Result<()> {
 
     match cli.command {
         Commands::Init { name } => {
-            init::run(name)?; 
+            init::run(name)?;
         }
         Commands::Build { path, verbose } => {
-            init_tracing(verbose); 
-            build::run(path, verbose > 0).await.map_err(|e| anyhow!(e))?;
+            init_tracing(verbose);
+            build::run(path, verbose > 0)
+                .await
+                .map_err(|e| anyhow!(e))?;
         }
         Commands::Global { action } => match action {
             GlobalAction::Set { key, value } => global::run_set(key, value)?,
             GlobalAction::List => global::run_list()?,
-        }
+        },
         Commands::Inspect { path } => {
             inspect::run(path)?;
         }
@@ -88,21 +86,25 @@ async fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
-
 fn init_tracing(verbosity: u8) {
-    if verbosity == 0 { return; }
+    if verbosity == 0 {
+        return;
+    }
 
     let level_str = match verbosity {
         1 => "debug",
         _ => "trace",
     };
 
-    let filter_str = format!("off,planar={},planarc={},planar_pkg={}", level_str, level_str, level_str);
+    let filter_str = format!(
+        "off,planar={},planarc={},planar_pkg={}",
+        level_str, level_str, level_str
+    );
 
     tracing_subscriber::fmt()
         .with_env_filter(EnvFilter::new(filter_str))
-        .with_file(verbosity > 1) 
+        .with_file(verbosity > 1)
         .with_line_number(verbosity > 1)
-        .with_target(true) 
+        .with_target(true)
         .init();
 }

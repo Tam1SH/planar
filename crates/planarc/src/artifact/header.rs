@@ -1,7 +1,6 @@
 pub const MAGIC: &[u8; 4] = b"PDLA";
 pub const VERSION: u32 = 1;
 
-
 const RAW_FINGERPRINT: &str = env!("PLANAR_COMPILER_FINGERPRINT");
 pub const COMPILER_BUILDID: u64 = parse_u64_const(RAW_FINGERPRINT);
 

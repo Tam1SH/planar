@@ -13,6 +13,35 @@ pub struct LinkedModule {
     pub types: Vec<Spanned<LinkedType>>,
     pub externs: Vec<Spanned<LinkedExternDefinition>>,
     pub queries: Vec<Spanned<LinkedQuery>>,
+    pub nodes: Vec<Spanned<LinkedNode>>,
+}
+
+#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
+#[rkyv(derive(Debug))]
+pub struct LinkedNode {
+    pub id: SymbolId,
+    pub kind: String,
+    pub statements: Vec<Spanned<LinkedNodeStatement>>,
+}
+
+#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
+#[rkyv(derive(Debug))]
+pub enum LinkedNodeStatement {
+    Match(LinkedMatchStatement),
+    Query(LinkedQuery),
+}
+
+#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
+#[rkyv(derive(Debug))]
+pub struct LinkedMatchStatement {
+    pub query_ref: Spanned<LinkedMatchQueryReference>,
+}
+
+#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
+#[rkyv(derive(Debug))]
+pub enum LinkedMatchQueryReference {
+    Global(SymbolId),
+    Raw(String),
 }
 
 #[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
@@ -45,7 +74,6 @@ pub struct LinkedExternArgument {
     pub name: String,
     pub ty: LinkedTypeReference,
 }
-
 
 #[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
 #[rkyv(derive(Debug))]
@@ -170,7 +198,7 @@ pub enum LinkedExpression {
     Binary {
         #[rkyv(omit_bounds)]
         left: Box<Spanned<LinkedExpression>>,
-        operator: Spanned<ResolvedId>, 
+        operator: Spanned<ResolvedId>,
         #[rkyv(omit_bounds)]
         right: Box<Spanned<LinkedExpression>>,
     },
@@ -195,6 +223,4 @@ pub enum LinkedExpression {
         #[rkyv(omit_bounds)]
         end: Option<Box<Spanned<LinkedExpression>>>,
     },
-
-
 }

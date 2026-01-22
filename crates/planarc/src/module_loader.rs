@@ -1,4 +1,7 @@
-use std::{fs, path::{Path, PathBuf}};
+use std::{
+    fs,
+    path::{Path, PathBuf},
+};
 
 use anyhow::{Context, Result};
 use walkdir::WalkDir;
@@ -18,36 +21,36 @@ pub struct DiscoveredModule {
 
 #[derive(Debug, Clone)]
 pub struct PackageRoot {
-    pub name: String,       
-    pub path: PathBuf,      
+    pub name: String,
+    pub path: PathBuf,
 }
 
 pub trait ModuleLoader {
-    
     fn scan(&self, root: &PackageRoot) -> Result<Vec<DiscoveredModule>>;
-    
+
     fn load(&self, path: &Path) -> Result<Source>;
 }
 
 pub struct FsModuleLoader;
 
 impl ModuleLoader for FsModuleLoader {
-        fn scan(&self, root: &PackageRoot) -> Result<Vec<DiscoveredModule>> {
+    fn scan(&self, root: &PackageRoot) -> Result<Vec<DiscoveredModule>> {
         let mut modules = Vec::new();
 
         for entry in WalkDir::new(&root.path).into_iter().filter_map(|e| e.ok()) {
             let path = entry.path();
-            
+
             if path.is_file() && path.extension().is_some_and(|ext| ext == "pdl") {
-                
                 // /tmp/app/utils/string.pdl (root: /tmp/app) -> utils/string.pdl
                 let relative = path.strip_prefix(&root.path).with_context(|| {
                     format!("Path {:?} is not inside root {:?}", path, root.path)
                 })?;
 
                 let stem = relative.with_extension("");
-                
-                let path_fqmn = stem.to_string_lossy().replace(std::path::MAIN_SEPARATOR, ".");
+
+                let path_fqmn = stem
+                    .to_string_lossy()
+                    .replace(std::path::MAIN_SEPARATOR, ".");
 
                 let fqmn = format!("{}.{}", root.name, path_fqmn);
 
@@ -64,14 +67,13 @@ impl ModuleLoader for FsModuleLoader {
     fn load(&self, path: &Path) -> Result<Source> {
         let content = std::fs::read_to_string(path)
             .with_context(|| format!("Failed to read source file: {:?}", path))?;
-            
+
         Ok(Source {
             origin: path.to_string_lossy().to_string(),
             content,
         })
     }
 }
-
 
 #[cfg(test)]
 pub struct InMemoryLoader {
@@ -85,11 +87,10 @@ impl ModuleLoader for InMemoryLoader {
         let pkg_prefix = format!("{}.", root.name);
 
         for (fqmn, _) in &self.files {
-            
             if fqmn == &root.name || fqmn.starts_with(&pkg_prefix) {
                 results.push(DiscoveredModule {
                     fqmn: fqmn.clone(),
-                    
+
                     path: PathBuf::from(format!("/memory/{}.pdl", fqmn)),
                     package: root.name.clone(),
                 });
@@ -99,13 +100,14 @@ impl ModuleLoader for InMemoryLoader {
     }
 
     fn load(&self, path: &Path) -> Result<Source> {
-        
         let path_str = path.to_string_lossy();
         let fqmn = path_str
             .trim_start_matches("/memory/")
             .trim_end_matches(".pdl");
 
-        let content = self.files.get(fqmn)
+        let content = self
+            .files
+            .get(fqmn)
             .ok_or_else(|| anyhow::anyhow!("Module {} not found in memory", fqmn))?;
 
         Ok(Source {
@@ -114,4 +116,3 @@ impl ModuleLoader for InMemoryLoader {
         })
     }
 }
-

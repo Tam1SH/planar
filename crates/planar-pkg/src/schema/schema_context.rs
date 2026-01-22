@@ -4,7 +4,6 @@ pub struct SchemaContext {
 }
 
 impl SchemaContext {
-
     pub fn enter(&mut self, name: &'static str) -> bool {
         if self.stack.contains(&name) {
             return false;

@@ -9,5 +9,10 @@ pub fn lower_import<'a>(
     let fqmn_node = node.fqmn()?;
     let path = ctx.text(&fqmn_node);
 
-    Ok(ctx.spanned(&node, Import { path }))
+    Ok(ctx.spanned(
+        &node,
+        Import {
+            fqmn: ctx.spanned(&fqmn_node, path),
+        },
+    ))
 }

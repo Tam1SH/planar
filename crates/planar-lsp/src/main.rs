@@ -1,21 +1,21 @@
 use dashmap::DashMap;
 use planar_pkg::config::PlanarContext;
 use planar_pkg::packaging::resolver::{NoOpProgress, WorkspaceResolver};
-use planarc::compiler::{CompilationResult, Compiler};
 use planarc::compiler::error::DiagnosticWithLocation;
+use planarc::compiler::{CompilationResult, Compiler};
 use planarc::linker;
 use planarc::module_loader::PackageRoot;
-use tokio::sync::RwLock;
 use std::cmp::Reverse;
 use std::collections::{BTreeMap, HashMap};
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
+use tokio::sync::RwLock;
 use tower_lsp::jsonrpc::Result;
 use tower_lsp::lsp_types::*;
 use tower_lsp::{Client, LanguageServer, LspService, Server};
+use tree_sitter::StreamingIterator;
 use tree_sitter::{Parser, Query, QueryCursor};
 use tree_sitter_planardl::LANGUAGE;
-use tree_sitter::StreamingIterator;
 
 mod loader;
 
@@ -24,45 +24,39 @@ use tower_lsp::lsp_types as lsp;
 use crate::loader::LspModuleLoader;
 
 fn map_to_lsp(err: &dyn DiagnosticWithLocation) -> lsp::Diagnostic {
-    
     let loc = err.location();
     let span = loc.span;
 
     let range = lsp::Range {
-        start: lsp::Position::new(
-            span.line.saturating_sub(1), 
-            span.col.saturating_sub(1)
-        ),
-        end: lsp::Position::new(
-            span.line_end, 
-            span.col_end
-        ),
+        start: lsp::Position::new(span.line.saturating_sub(1), span.col.saturating_sub(1)),
+        end: lsp::Position::new(span.line_end, span.col_end),
     };
 
     lsp::Diagnostic {
         range,
         severity: Some(lsp::DiagnosticSeverity::ERROR),
-        code: err.code().map(|c| lsp::NumberOrString::String(c.to_string())),
+        code: err
+            .code()
+            .map(|c| lsp::NumberOrString::String(c.to_string())),
         source: Some("planar".to_string()),
-        message: err.to_string(),  
+        message: err.to_string(),
         ..Default::default()
     }
 }
 
 const TOKEN_TYPES: &[SemanticTokenType] = &[
-    SemanticTokenType::KEYWORD,    // 0
-    SemanticTokenType::TYPE,       // 1
-    SemanticTokenType::VARIABLE,    // 2
-    SemanticTokenType::FUNCTION,    // 3
-    SemanticTokenType::STRING,      // 4
-    SemanticTokenType::NUMBER,      // 5
-    SemanticTokenType::OPERATOR,    // 6
-    SemanticTokenType::PARAMETER,   // 7
-    SemanticTokenType::PROPERTY,    // 8
-    SemanticTokenType::DECORATOR,   // 9
+    SemanticTokenType::KEYWORD,        // 0
+    SemanticTokenType::TYPE,           // 1
+    SemanticTokenType::VARIABLE,       // 2
+    SemanticTokenType::FUNCTION,       // 3
+    SemanticTokenType::STRING,         // 4
+    SemanticTokenType::NUMBER,         // 5
+    SemanticTokenType::OPERATOR,       // 6
+    SemanticTokenType::PARAMETER,      // 7
+    SemanticTokenType::PROPERTY,       // 8
+    SemanticTokenType::DECORATOR,      // 9
     SemanticTokenType::new("storage"), // 10
 ];
-
 
 fn get_token_index(capture_name: &str) -> Option<u32> {
     match capture_name {
@@ -95,7 +89,6 @@ struct Backend {
 
 impl Backend {
     fn new(client: Client) -> Self {
-        
         let highlights_scm = include_str!("../../planarc/tree-sitter-pdl/queries/highlights.scm");
         let lang = LANGUAGE.into();
         let query = Query::new(&lang, highlights_scm)
@@ -105,7 +98,7 @@ impl Backend {
             client,
             documents: DashMap::new(),
             query,
-            last_compilation: Arc::new(RwLock::new(None))
+            last_compilation: Arc::new(RwLock::new(None)),
         }
     }
 
@@ -113,25 +106,30 @@ impl Backend {
         let mut parser = Parser::new();
         parser.set_language(&LANGUAGE.into()).unwrap();
         if let Some(tree) = parser.parse(text, None) {
-            self.documents.insert(uri.to_string(), Document {
-                tree,
-                source: text.to_string(),
-            });
+            self.documents.insert(
+                uri.to_string(),
+                Document {
+                    tree,
+                    source: text.to_string(),
+                },
+            );
         }
     }
 
     async fn compile_and_report(&self, current_uri: &str) {
         let uri = Url::parse(current_uri).unwrap();
         let file_path = uri.to_file_path().expect("Invalid file path");
-        
-        let project_root = find_project_root(&file_path)
-            .unwrap_or_else(|| std::env::current_dir().unwrap());
 
-        let planar_ctx = PlanarContext::new(); 
+        let project_root =
+            find_project_root(&file_path).unwrap_or_else(|| std::env::current_dir().unwrap());
+
+        let planar_ctx = PlanarContext::new();
         let mut resolver = WorkspaceResolver::new(planar_ctx, &NoOpProgress);
-        
+
         if let Err(e) = resolver.resolve(project_root.clone()).await {
-            self.client.log_message(MessageType::ERROR, format!("Resolution failed: {}", e)).await;
+            self.client
+                .log_message(MessageType::ERROR, format!("Resolution failed: {}", e))
+                .await;
             return;
         }
 
@@ -141,16 +139,17 @@ impl Backend {
 
         match compiler.compile(roots, resolver.grammar_paths) {
             Ok(result) => {
-
                 let mut diagnostics_by_file: HashMap<String, Vec<lsp::Diagnostic>> = HashMap::new();
 
                 for err in &result.errors.0 {
                     let loc = err.location();
                     if let Some(source) = result.registry.get(loc.file_id) {
-                        
                         if let Ok(url) = Url::from_file_path(&source.origin) {
                             let lsp_diag = map_to_lsp(err.as_ref());
-                            diagnostics_by_file.entry(url.to_string()).or_default().push(lsp_diag);
+                            diagnostics_by_file
+                                .entry(url.to_string())
+                                .or_default()
+                                .push(lsp_diag);
                         }
                     }
                 }
@@ -164,17 +163,17 @@ impl Backend {
                         self.client.publish_diagnostics(uri, diags, None).await;
                     }
                 }
-                
+
                 let mut last = self.last_compilation.write().await;
                 *last = Some(Arc::new(result));
-
             }
             Err(e) => {
-                self.client.log_message(MessageType::ERROR, format!("Compiler crashed: {}", e)).await;
+                self.client
+                    .log_message(MessageType::ERROR, format!("Compiler crashed: {}", e))
+                    .await;
             }
         }
     }
-
 }
 
 fn find_project_root(start_path: &Path) -> Option<PathBuf> {
@@ -238,7 +237,9 @@ impl LanguageServer for Backend {
     }
 
     async fn did_change(&self, params: DidChangeTextDocumentParams) {
-        self.client.log_message(MessageType::INFO, "did_change").await;
+        self.client
+            .log_message(MessageType::INFO, "did_change")
+            .await;
         if let Some(change) = params.content_changes.first() {
             let uri = params.text_document.uri.as_str();
             self.parse_text(uri, &change.text);
@@ -250,7 +251,6 @@ impl LanguageServer for Backend {
         &self,
         params: SemanticTokensParams,
     ) -> Result<Option<SemanticTokensResult>> {
-
         self.client.log_message(MessageType::INFO, "lol").await;
 
         let uri = params.text_document.uri.as_str();
@@ -263,23 +263,24 @@ impl LanguageServer for Backend {
         let mut raw_tokens = Vec::new();
 
         let comp_guard = self.last_compilation.read().await;
-        
+
         {
-            let mut matches = cursor.matches(&self.query, doc.tree.root_node(), doc.source.as_bytes());
+            let mut matches =
+                cursor.matches(&self.query, doc.tree.root_node(), doc.source.as_bytes());
             while let Some(m) = matches.next() {
                 for capture in m.captures {
                     let capture_name = self.query.capture_names()[capture.index as usize];
-                    
+
                     if let Some(token_type) = get_token_index(capture_name) {
                         let range = capture.node.range();
-                        
+
                         if range.start_point.row == range.end_point.row {
                             raw_tokens.push(RawToken {
                                 line: range.start_point.row as u32,
                                 start: range.start_point.column as u32,
                                 length: (range.end_point.column - range.start_point.column) as u32,
                                 token_type,
-                                priority: 0
+                                priority: 0,
                             });
                         }
                     }
@@ -288,24 +289,41 @@ impl LanguageServer for Backend {
         }
 
         self.client.log_message(MessageType::INFO, "lol 4").await;
-        
-        self.client.log_message(MessageType::INFO, format!("is_some: {}", comp_guard.as_ref().is_some())).await;
+
+        self.client
+            .log_message(
+                MessageType::INFO,
+                format!("is_some: {}", comp_guard.as_ref().is_some()),
+            )
+            .await;
 
         if let Some(res) = comp_guard.as_ref() {
-        self.client.log_message(MessageType::INFO, format!("symbols count: {}", res.symbol_table.symbols.len())).await;
+            self.client
+                .log_message(
+                    MessageType::INFO,
+                    format!("symbols count: {}", res.symbol_table.symbols.len()),
+                )
+                .await;
             for (fqmn, metadata) in &res.symbol_table.symbols {
-                
-                self.client.log_message(MessageType::INFO, format!("Checking symbol file: {} == {:?}", fqmn, res.registry.get(metadata.location.file_id))).await;
+                self.client
+                    .log_message(
+                        MessageType::INFO,
+                        format!(
+                            "Checking symbol file: {} == {:?}",
+                            fqmn,
+                            res.registry.get(metadata.location.file_id)
+                        ),
+                    )
+                    .await;
 
                 if let Some(source) = res.registry.get(metadata.location.file_id) {
                     if let Ok(file_url) = Url::from_file_path(&source.origin) {
-
                         if file_url.as_str() == uri {
                             let span = metadata.location.span;
-                            
+
                             let token_type = match metadata.kind {
-                                linker::ids::SymbolKind::ExternFunction => Some(3), 
-                                linker::ids::SymbolKind::Type => Some(1),  
+                                linker::ids::SymbolKind::ExternFunction => Some(3),
+                                linker::ids::SymbolKind::Type => Some(1),
                                 _ => None,
                             };
 
@@ -325,7 +343,6 @@ impl LanguageServer for Backend {
         }
 
         drop(comp_guard);
-        
 
         raw_tokens.sort_by_key(|t| (t.line, t.start, Reverse(t.priority)));
         raw_tokens.dedup_by(|a, b| a.line == b.line && a.start == b.start);
