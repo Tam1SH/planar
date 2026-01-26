@@ -81,7 +81,9 @@ pub enum ValidationError {
     #[error("Untyped query: no grammar specified for this file")]
     #[diagnostic(
         code(pdl::validator::untyped_query),
-        help("Add 'using grammars.<lang>' at the top of the file to enable S-expression validation.")
+        help(
+            "Add 'using grammars.<lang>' at the top of the file to enable S-expression validation."
+        )
     )]
     UntypedQuery {
         #[source_code]

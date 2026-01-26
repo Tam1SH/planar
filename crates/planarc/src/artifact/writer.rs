@@ -10,17 +10,17 @@ pub fn write_bundle(
     writer: &mut impl Write,
     build_id: Option<u64>,
 ) -> io::Result<()> {
-    todo!()
-    // let bytes = rkyv::to_bytes::<Error>(program)
-    //     .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e.to_string()))?;
 
-    // let checksum = xxh64(&bytes, 0);
+    let bytes = rkyv::to_bytes::<Error>(program)
+        .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e.to_string()))?;
 
-    // let header = Header::new(checksum, build_id);
+    let checksum = xxh64(&bytes, 0);
 
-    // writer.write_all(&header.as_bytes())?;
+    let header = Header::new(checksum, build_id);
 
-    // writer.write_all(&bytes)?;
+    writer.write_all(&header.as_bytes())?;
 
-    // Ok(())
+    writer.write_all(&bytes)?;
+
+    Ok(())
 }

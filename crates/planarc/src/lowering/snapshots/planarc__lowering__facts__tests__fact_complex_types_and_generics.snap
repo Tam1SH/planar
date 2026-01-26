@@ -14,9 +14,7 @@ FactDefinition {
                 name: "Int" @ Span { start: 53, end: 56, line: 3, col: 24, line_end: 2, col_end: 26 },
                 refinement: Some(
                     Binary {
-                        left: Identifier(
-                            "it",
-                        ) @ Span { start: 63, end: 65, line: 3, col: 34, line_end: 2, col_end: 35 },
+                        left: It @ Span { start: 63, end: 65, line: 3, col: 34, line_end: 2, col_end: 35 },
                         op: "in" @ Span { start: 66, end: 77, line: 3, col: 37, line_end: 2, col_end: 47 },
                         right: InRange {
                             start: Number(

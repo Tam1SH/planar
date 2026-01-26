@@ -42,7 +42,9 @@ impl GrammarRegistry {
     }
 
     pub fn to_metadata(self) -> BTreeMap<String, GrammarMetadata> {
-        self.paths.into_keys().map(|k| {
+        self.paths
+            .into_keys()
+            .map(|k| {
                 (
                     k,
                     GrammarMetadata {

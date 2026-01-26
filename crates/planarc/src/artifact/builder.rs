@@ -11,8 +11,7 @@ pub fn create_bundle(compilation: CompilationResult) -> Bundle {
     let wasm_modules = BTreeMap::new();
 
     Bundle {
-        symbol_table: compilation.symbol_table,
-        modules: compilation.modules,
+        world: compilation.typed_world,
         wasm_modules,
         files,
         grammars: compilation.grammars.to_metadata(),

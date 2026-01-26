@@ -142,7 +142,7 @@
       },
       "right_fact": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "emmited_fact",
@@ -153,7 +153,7 @@
     },
     "children": {
       "multiple": false,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "relation",
@@ -1094,46 +1094,10 @@
     "fields": {
       "type": {
         "multiple": false,
-        "required": false,
+        "required": true,
         "types": [
           {
             "type": "type_annotation",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "type_field_definition",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "type_field_definition",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      },
-      "type": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "type_definition",
             "named": true
           }
         ]

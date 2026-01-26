@@ -1,8 +1,11 @@
 use crate::Document;
 use anyhow::{Context, Result};
 use dashmap::DashMap;
+use miette::NamedSource;
 use planarc::module_loader::{DiscoveredModule, FsModuleLoader, ModuleLoader, PackageRoot, Source};
+use planarc::source_registry::MietteSource;
 use std::path::{Path, PathBuf};
+use std::sync::Arc;
 use tower_lsp::lsp_types::Url;
 
 pub struct LspModuleLoader {
@@ -26,17 +29,17 @@ impl LspModuleLoader {
 
 impl ModuleLoader for LspModuleLoader {
     fn scan(&self, root: &PackageRoot) -> Result<Vec<DiscoveredModule>> {
-        let mut modules = self.inner.scan(root)?;
+        let modules = self.inner.scan(root)?;
         Ok(modules)
     }
 
-    fn load(&self, path: &Path) -> Result<Source> {
+    fn load(&self, path: &Path) -> Result<MietteSource> {
         if let Some(uri) = self.path_to_uri(path) {
             if let Some(doc) = self.documents.get(&uri) {
-                return Ok(Source {
-                    origin: path.to_string_lossy().to_string(),
-                    content: doc.source.clone(),
-                });
+                return Ok(Arc::new(miette::NamedSource::new(
+                    path.to_string_lossy().to_string(),
+                    Arc::new(doc.source.clone()),
+                )));
             }
         }
 

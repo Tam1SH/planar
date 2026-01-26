@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="CargoProjects">
+    <cargoProject FILE="$PROJECT_DIR$/Cargo.toml">
+      <package file="$PROJECT_DIR$/crates/planar-cli">
+        <feature name="default" enabled="true" />
+      </package>
+      <package file="$PROJECT_DIR$/crates/planar-config-macro">
+        <feature name="default" enabled="true" />
+      </package>
+      <package file="$PROJECT_DIR$/crates/planar-lsp">
+        <feature name="default" enabled="true" />
+      </package>
+      <package file="$PROJECT_DIR$/crates/planar-pkg">
+        <feature name="default" enabled="true" />
+      </package>
+      <package file="$PROJECT_DIR$/crates/planar-runtime">
+        <feature name="default" enabled="true" />
+      </package>
+      <package file="$PROJECT_DIR$/crates/planarc">
+        <feature name="default" enabled="true" />
+      </package>
+      <package file="$PROJECT_DIR$/crates/planarc/tree-sitter-pdl">
+        <feature name="default" enabled="true" />
+      </package>
+      <package file="$PROJECT_DIR$/crates/planarc/tree-sitter-query">
+        <feature name="default" enabled="true" />
+      </package>
+    </cargoProject>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f6fdddbc-b30d-4d0c-9ac7-02fc26cca90a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planar-cli/src/build.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planar-cli/src/build.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planar-cli/src/inspect.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planar-cli/src/inspect.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planar-lsp/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planar-lsp/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planar-lsp/src/loader.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planar-lsp/src/loader.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planar-lsp/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planar-lsp/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/artifact/builder.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/artifact/builder.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/artifact/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/artifact/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/artifact/model.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/artifact/model.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/artifact/reader.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/artifact/reader.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/artifact/snapshots/planarc__artifact__tests__program_roundtrip.snap" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/artifact/snapshots/planarc__artifact__tests__program_roundtrip.snap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/artifact/writer.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/artifact/writer.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/ast.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/ast.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/compiler/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/compiler/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/error.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/error.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/linker/dependency_graph.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/linker/dependency_graph.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/linker/error.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/linker/error.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/linker/linked_ast.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/linker/linked_ast.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/linker/linked_world.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/linker/linked_world.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/linker/linker.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/linker/linker.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/linker/lookup.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/linker/lookup.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/linker/match_linker.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/linker/meta.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/linker/meta.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/linker/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/linker/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/linker/resolver.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/linker/snapshots/planarc__linker__linker__tests__linker_state_snapshot.snap" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/linker/snapshots/planarc__linker__linker__tests__linker_state_snapshot.snap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/linker/symbol_table.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/linker/symbol_table.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/lowering/common.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/lowering/common.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/lowering/facts.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/lowering/facts.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/lowering/grammar.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/lowering/grammar.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/lowering/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/lowering/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/lowering/module.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/lowering/module.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/lowering/node.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/lowering/node.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/lowering/query.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/lowering/query.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/lowering/snapshots/planarc__lowering__facts__tests__fact_complex_types_and_generics.snap" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/lowering/snapshots/planarc__lowering__facts__tests__fact_complex_types_and_generics.snap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/lowering/snapshots/planarc__lowering__facts__tests__fact_with_refinements.snap" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/lowering/snapshots/planarc__lowering__facts__tests__fact_with_refinements.snap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/lowering/snapshots/planarc__lowering__node__tests__node_with_match.snap" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/lowering/snapshots/planarc__lowering__node__tests__node_with_match.snap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/lowering/snapshots/planarc__lowering__query__tests__empty_query.snap" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/lowering/snapshots/planarc__lowering__query__tests__empty_query.snap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/lowering/snapshots/planarc__lowering__query__tests__query_definition.snap" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/lowering/snapshots/planarc__lowering__query__tests__query_definition.snap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/lowering/snapshots/planarc__lowering__query__tests__query_definition_with_captures.snap" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/lowering/snapshots/planarc__lowering__query__tests__query_definition_with_captures.snap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/lowering/snapshots/planarc__lowering__type_decl__tests__fold_in_refinement.snap" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/lowering/snapshots/planarc__lowering__type_decl__tests__fold_in_refinement.snap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/lowering/snapshots/planarc__lowering__type_decl__tests__simple_type_decl.snap" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/lowering/snapshots/planarc__lowering__type_decl__tests__simple_type_decl.snap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/lowering/snapshots/planarc__lowering__type_decl__tests__type_decl_with_nested_refinement.snap" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/lowering/snapshots/planarc__lowering__type_decl__tests__type_decl_with_nested_refinement.snap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/lowering/snapshots/planarc__lowering__type_decl__tests__type_decl_with_refinement.snap" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/lowering/snapshots/planarc__lowering__type_decl__tests__type_decl_with_refinement.snap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/lowering/type_decl.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/lowering/type_decl.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/pdl.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/pdl.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/source_registry.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/source_registry.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/spanned.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/spanned.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/validator/error.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/validator/error.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/validator/grammar_registry.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/validator/grammar_registry.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/validator/query_validator.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/validator/query_validator.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/src/validator/wit_validator.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/src/validator/wit_validator.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/tree-sitter-pdl/grammar.js" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/tree-sitter-pdl/grammar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/tree-sitter-pdl/src/grammar.json" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/tree-sitter-pdl/src/grammar.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/tree-sitter-pdl/src/node-types.json" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/tree-sitter-pdl/src/node-types.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/tree-sitter-pdl/src/parser.c" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/tree-sitter-pdl/src/parser.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/tree-sitter-pdl/test/corpus/node.txt" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/tree-sitter-pdl/test/corpus/node.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/tree-sitter-query" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/tree-sitter-query" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/tree-sitter-query/bindings/rust/build.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/tree-sitter-query/bindings/rust/build.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crates/planarc/tree-sitter-query/bindings/rust/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/crates/planarc/tree-sitter-query/bindings/rust/lib.rs" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="RsBuildProfile:test" />
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Tam1SH/planar.git",
+    "accountId": "4fe141d8-2dd0-417b-96b1-76e487a00cbe"
+  }
+}]]></component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/../../.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/thiserror-impl-2.0.17/src/lib.rs" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/../../.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tree-sitter-language-0.1.6/src/language.rs" root0="SKIP_INSPECTION" />
+    <setting file="file://$USER_HOME$/AppData/Local/JetBrains/RustRover2025.2/intellij-rust/stdlib-local-copy/1.91.1-7a6e7f95c25b34f1b4dc4f313277c5ab849ed742/library/alloc/src/vec/mod.rs" root0="SKIP_INSPECTION" />
+    <setting file="file://$USER_HOME$/AppData/Local/JetBrains/RustRover2025.2/intellij-rust/stdlib-local-copy/1.91.1-7a6e7f95c25b34f1b4dc4f313277c5ab849ed742/library/core/src/iter/traits/iterator.rs" root0="SKIP_INSPECTION" />
+    <setting file="file://$USER_HOME$/AppData/Local/JetBrains/RustRover2025.2/intellij-rust/stdlib-local-copy/1.91.1-7a6e7f95c25b34f1b4dc4f313277c5ab849ed742/library/core/src/result.rs" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="yLZXCDT1" />
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/crates/planar-lsp/editors/vscode/package.json" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="38jHvzbQdyGEPuHSUy37mcNscYn" />
+  <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="openDirectoriesWithSingleClick" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Cargo.Build `Test lowering::query::tests::test_query_definition`.executor": "Run",
+    "Cargo.Test artifact::tests.executor": "Run",
+    "Cargo.Test artifact::tests::test_program_binary_identity_snapshot.executor": "Run",
+    "Cargo.Test linker::linker::tests::test_extern_collision_error.executor": "Run",
+    "Cargo.Test linker::linker::tests::test_match_capture_resolution_error.executor": "Run",
+    "Cargo.Test linker::tests.executor": "Run",
+    "Cargo.Test lowering::query::tests::test_empty_query.executor": "Run",
+    "Cargo.Test lowering::query::tests::test_query_definition.executor": "Profiler",
+    "Cargo.Test lowering::query::tests::test_query_definition_with_captures.executor": "Run",
+    "Cargo.Test planar.executor": "Coverage",
+    "Cargo.Test query::tests.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.rust.reset.selective.auto.import": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "//wsl.localhost/Ubuntu/home/ignat/projects/planar",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
+    "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
+    "org.rust.first.attach.projects": "true",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="Cargo.Test lowering::query::tests::test_query_definition">
+    <configuration name="Run planar-cli" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+      <option name="command" value="run --package planar-cli --bin planar-cli" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Run planar-lsp" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+      <option name="command" value="run --package planar-lsp --bin planar-lsp" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Run planar-runtime" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+      <option name="command" value="run --package planar-runtime --bin planar-runtime" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test linker::tests" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="test --package planarc --lib linker::linker::tests" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test lowering::query::tests::test_empty_query" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="test --package planarc --lib lowering::query::tests::test_empty_query -- --exact" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test lowering::query::tests::test_query_definition" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="buildProfileId" value="test" />
+      <option name="command" value="test --package planarc --lib lowering::query::tests::test_query_definition -- --exact" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test lowering::query::tests::test_query_definition_with_captures" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="test --package planarc --lib lowering::query::tests::test_query_definition_with_captures -- --exact" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test planar" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+      <option name="buildProfileId" value="dev" />
+      <option name="command" value="test --workspace" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test query::tests" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="test --package planarc --lib lowering::query::tests" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Cargo.Test lowering::query::tests::test_query_definition" />
+        <item itemvalue="Cargo.Test lowering::query::tests::test_empty_query" />
+        <item itemvalue="Cargo.Test query::tests" />
+        <item itemvalue="Cargo.Test lowering::query::tests::test_query_definition_with_captures" />
+        <item itemvalue="Cargo.Test linker::tests" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="RustProjectSettings">
+    <option name="toolchainHomeDirectory" value="$PROJECT_DIR$/../../../../usr/bin" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f6fdddbc-b30d-4d0c-9ac7-02fc26cca90a" name="Changes" comment="" />
+      <created>1769306296033</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1769306296033</updated>
+      <workItem from="1769306298368" duration="801000" />
+      <workItem from="1769307122914" duration="1050000" />
+      <workItem from="1769308202588" duration="1444000" />
+      <workItem from="1769319266262" duration="597000" />
+      <workItem from="1769425805735" duration="6995000" />
+      <workItem from="1769432876824" duration="552000" />
+      <workItem from="1769433456462" duration="3936000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TerminalProjectNonSharedOptionsProvider">
+    <option name="shellPath" value="wsl.exe --distribution Ubuntu -- exec zsh" />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

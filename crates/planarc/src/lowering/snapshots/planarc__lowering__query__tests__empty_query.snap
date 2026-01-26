@@ -5,6 +5,6 @@ expression: ast
 QueryDefinition {
     vis: Private,
     name: "empty" @ Span { start: 6, end: 11, line: 1, col: 7, line_end: 0, col_end: 11 },
-    grammar: "some.lang" @ Span { start: 13, end: 22, line: 1, col: 14, line_end: 0, col_end: 22 },
-    value: "" @ Span { start: 25, end: 27, line: 1, col: 26, line_end: 0, col_end: 27 },
-} @ Span { start: 0, end: 27, line: 1, col: 1, line_end: 0, col_end: 27 }
+    value: " " @ Span { start: 15, end: 16, line: 1, col: 16, line_end: 0, col_end: 16 },
+    captures: [],
+} @ Span { start: 0, end: 17, line: 1, col: 1, line_end: 0, col_end: 17 }

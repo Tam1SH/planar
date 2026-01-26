@@ -57,9 +57,8 @@ pub async fn run(path: PathBuf, is_tracing: bool) -> miette::Result<()> {
         .with_context(|| format!("Compilation failed for {}", package_name))?;
 
     if result.has_errors() {
-        for error in &result.errors.0 {
-            eprintln!("{:?}", error);
-        }
+        eprintln!("{:?}", &result.errors);
+
         let error_count = result.errors.0.len();
         eprintln!(
             "\n{} with {} {}",

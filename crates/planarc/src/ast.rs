@@ -58,9 +58,9 @@ pub enum BlockStatement {
 #[derive(Debug, Clone)]
 pub struct EmitStatement {
     pub left: Spanned<EmittedFact>,
-    pub right: Spanned<EmittedFact>,
-    pub relation: Spanned<String>,
-    pub direction: RelationDirection,
+    pub right: Option<Spanned<EmittedFact>>,
+    pub relation: Option<Spanned<String>>,
+    pub direction: Option<RelationDirection>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -128,7 +128,6 @@ pub struct EdgeDefinition {
 #[derive(Debug, Clone)]
 pub struct TypeDefinition {
     pub base_type: Option<TypeAnnotation>,
-    pub fields: Vec<Spanned<TypeField>>,
 }
 
 #[derive(Debug, Clone)]

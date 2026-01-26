@@ -17,7 +17,6 @@ impl<'a> QueryValidator<'a> {
         let mut errors = Vec::new();
 
         let global_lang = if let Some(grammar_ref) = &module.grammar {
-            
             if let Some(lang_name) = grammar_ref.value.strip_prefix("grammars.") {
                 match self.grammars.get_language(lang_name) {
                     Ok(lang) => Some(lang),
@@ -48,28 +47,28 @@ impl<'a> QueryValidator<'a> {
 
         for node in &module.nodes {
             for stmt in &node.value.statements {
-                if let LinkedNodeStatement::Match(m) = &stmt.value {
-                    
-                    if let LinkedMatchQueryReference::Raw(source) = &m.query_ref.value {
-                        
-                        if let Some(lang) = &global_lang {
-                            if let Err(e) = tree_sitter::Query::new(lang, source) {
-                                let (src, span) = self.registry.get_source_and_span(m.query_ref.loc);
-                                errors.push(Box::new(ValidationError::InvalidQuerySyntax {
-                                    message: e.to_string(),
-                                    span,
-                                    src,
-                                    loc: m.query_ref.loc,
-                                }));
-                            }
-                        } else {
-                            let (src, span) = self.registry.get_source_and_span(m.query_ref.loc);
-                            errors.push(Box::new(ValidationError::UntypedQuery {
+                if let LinkedNodeStatement::Match(m) = &stmt
+                    && let LinkedMatchQueryReference::Raw { source: sourse, .. } =
+                        &m.value.query_ref.value
+                {
+                    if let Some(lang) = &global_lang {
+                        if let Err(e) = tree_sitter::Query::new(lang, &sourse.value) {
+                            let (src, span) =
+                                self.registry.get_source_and_span(m.value.query_ref.loc);
+                            errors.push(Box::new(ValidationError::InvalidQuerySyntax {
+                                message: e.to_string(),
                                 span,
                                 src,
-                                loc: m.query_ref.loc,
+                                loc: m.value.query_ref.loc,
                             }));
                         }
+                    } else {
+                        let (src, span) = self.registry.get_source_and_span(m.value.query_ref.loc);
+                        errors.push(Box::new(ValidationError::UntypedQuery {
+                            span,
+                            src,
+                            loc: m.value.query_ref.loc,
+                        }));
                     }
                 }
             }
@@ -99,46 +98,58 @@ impl<'a> QueryValidator<'a> {
         ValidationErrors::new(errors)
     }
 }
-
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::linker::dependency_graph::LoweredGraph;
-    use crate::linker::linker::tests::setup_project;
+    use crate::linker::linked_ast::LinkedModule;
+    use crate::linker::linker::link_to_world;
+    use crate::linker::linker::tests::setup_lowered_graph;
     use crate::loader::{LanguageProvider, MockLanguageLoader};
-    use crate::module_loader::Source;
-    use std::path::PathBuf;
+    use crate::source_registry::SourceRegistry;
 
-    fn setup_test(files: &[(&str, &str)]) -> (LoweredGraph, GrammarRegistry, LinkedModule) {
-        let (lg, mut linker) = setup_project(files, "main");
-        let (linked_mod, _) = linker.link_module("main", &lg.modules["main"], &lg.registry);
+    fn setup_test(files: &[(&str, &str)]) -> (SourceRegistry, GrammarRegistry, LinkedModule) {
+        let lg = setup_lowered_graph(files);
+
+        let (world, _errors) = link_to_world(vec![], lg);
 
         let mut gr = GrammarRegistry::new(Box::new(MockLanguageLoader));
         gr.add_grammar("pdl".into(), "pdl.so".into());
 
-        (lg, gr, linked_mod)
+        let linked_mod = world
+            .modules
+            .get("main")
+            .cloned()
+            .expect("Module 'main' should be present in linked world");
+
+        (world.registry, gr, linked_mod)
     }
 
     #[test]
     fn test_query_ok() {
-        let (lg, gr, m) = setup_test(&[("main", "query Q: grammars.pdl = `(identifier) @id`")]);
-        let v = QueryValidator {
-            registry: &lg.registry,
-            grammars: &gr,
-        };
+        let (reg, gr, m) =
+            setup_test(&[("main", "using grammars.pdl\nquery Q = `(identifier) @id`")]);
 
-        assert!(v.validate_module(&m).is_empty());
-    }
-
-    #[test]
-    fn test_query_bad_syntax() {
-        let (lg, gr, m) = setup_test(&[("main", "query Q: grammars.pdl = `(unclosed`")]);
         let v = QueryValidator {
-            registry: &lg.registry,
+            registry: &reg,
             grammars: &gr,
         };
 
         let errs = v.validate_module(&m);
+        assert!(errs.is_empty(), "Expected no errors, got: {:?}", errs);
+    }
+
+    #[test]
+    fn test_query_bad_syntax() {
+        let (reg, gr, m) = setup_test(&[("main", "using grammars.pdl\nquery Q = `(unclosed`")]);
+
+        let v = QueryValidator {
+            registry: &reg,
+            grammars: &gr,
+        };
+
+        let errs = v.validate_module(&m);
+        assert!(!errs.0.is_empty());
         assert!(matches!(
             errs.0[0].as_ref(),
             ValidationError::InvalidQuerySyntax { .. }
@@ -147,9 +158,10 @@ mod tests {
 
     #[test]
     fn test_query_bad_ns() {
-        let (lg, gr, m) = setup_test(&[("main", "query Q: bad.pdl = `(id)`")]);
+        let (reg, gr, m) = setup_test(&[("main", "using bad.pdl\nquery Q = `(id)`")]);
+
         let v = QueryValidator {
-            registry: &lg.registry,
+            registry: &reg,
             grammars: &gr,
         };
 
@@ -162,9 +174,10 @@ mod tests {
 
     #[test]
     fn test_query_not_found() {
-        let (lg, gr, m) = setup_test(&[("main", "query Q: grammars.missing = `(id)`")]);
+        let (reg, gr, m) = setup_test(&[("main", "using grammars.missing\nquery Q = `(id)`")]);
+
         let v = QueryValidator {
-            registry: &lg.registry,
+            registry: &reg,
             grammars: &gr,
         };
 

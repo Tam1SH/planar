@@ -1,0 +1,10 @@
+---
+source: crates/planarc/src/lowering/query.rs
+expression: ast
+---
+QueryDefinition {
+    vis: Private,
+    name: "labels" @ Span { start: 6, end: 12, line: 1, col: 7, line_end: 0, col_end: 12 },
+    value: "@simple @with.dot @with-dash @under_score" @ Span { start: 16, end: 57, line: 1, col: 17, line_end: 0, col_end: 57 },
+    captures: [],
+} @ Span { start: 0, end: 58, line: 1, col: 1, line_end: 0, col_end: 58 }

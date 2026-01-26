@@ -9,7 +9,7 @@ use crate::{
 
 #[derive(Clone, Debug, Error, Diagnostic)]
 pub enum LinkerError {
-    #[error("Undefined capture: '@{capture_name}' is not defined in query '{query_name}'")]
+    #[error("Undefined capture: '@{capture_name}'")]
     #[diagnostic(
         code(pdl::linker::undefined_capture),
         help(
@@ -18,7 +18,6 @@ pub enum LinkerError {
         )
     )]
     UndefinedCapture {
-        query_name: String,
         capture_name: String,
 
         #[source_code]
@@ -87,7 +86,7 @@ pub enum LinkerError {
         span: SourceSpan,
         loc: Location,
         #[help]
-        help: Option<String>
+        help: Option<String>,
     },
 
     #[error("Ambiguous reference: '{name}' could refer to multiple symbols")]

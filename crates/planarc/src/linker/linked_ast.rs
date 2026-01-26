@@ -1,13 +1,8 @@
-use rkyv::{Archive, Deserialize, Serialize};
+use crate::ast;
+use crate::linker::meta::{ResolvedId, SymbolId};
+use crate::spanned::{FileId, Spanned};
 
-use crate::{
-    ast,
-    linker::meta::{ResolvedId, SymbolId},
-    spanned::{FileId, Spanned},
-};
-
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkedModule {
     pub file_id: FileId,
     pub grammar: Option<Spanned<String>>,
@@ -19,8 +14,7 @@ pub struct LinkedModule {
     pub edges: Vec<Spanned<LinkedEdge>>,
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkedEdge {
     pub id: SymbolId,
     pub name: String,
@@ -29,25 +23,22 @@ pub struct LinkedEdge {
     pub relation: String,
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum LinkedMatchItem {
     Let(LinkedLetBinding),
     Capture(LinkedCapture),
     Emit(LinkedEmitStatement),
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkedEmitStatement {
     pub left: LinkedEmittedFact,
-    pub right: LinkedEmittedFact,
-    pub relation: Spanned<SymbolId>,
-    pub direction: RelationDirection,
+    pub right: Option<LinkedEmittedFact>,
+    pub relation: Option<Spanned<SymbolId>>,
+    pub direction: Option<RelationDirection>,
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum RelationDirection {
     Left,  // <
     Right, // >
@@ -64,94 +55,76 @@ impl From<ast::RelationDirection> for RelationDirection {
     }
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkedEmittedFact {
     pub fact_id: SymbolId,
     pub fields: Vec<LinkedEmittedField>,
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkedEmittedField {
     pub name: Spanned<String>,
     pub value: Spanned<LinkedExpression>,
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkedNode {
     pub id: SymbolId,
     pub kind: String,
-    pub statements: Vec<Spanned<LinkedNodeStatement>>,
+    pub statements: Vec<LinkedNodeStatement>,
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum LinkedNodeStatement {
-    Match(LinkedMatchStatement),
-    Query(LinkedQuery),
+    Match(Spanned<LinkedMatchStatement>),
+    Query(Spanned<LinkedQuery>),
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkedMatchStatement {
     pub query_ref: Spanned<LinkedMatchQueryReference>,
     pub body: Vec<Spanned<LinkedMatchItem>>,
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkedLetBinding {
     pub name: Spanned<String>,
     pub value: Spanned<LinkedExpression>,
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
-#[rkyv(
-    serialize_bounds(
-        __S: rkyv::ser::Writer + rkyv::ser::Allocator + rkyv::rancor::Fallible,
-        <__S as rkyv::rancor::Fallible>::Error: rkyv::rancor::Source,
-    ),
-    deserialize_bounds(
-        __D: rkyv::rancor::Fallible,
-        <__D as rkyv::rancor::Fallible>::Error: rkyv::rancor::Source,
-    ),
-    bytecheck(bounds(
-        __C: rkyv::validation::ArchiveContext,
-        <__C as rkyv::rancor::Fallible>::Error: rkyv::rancor::Source,
-    ))
-)]
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkedCapture {
     pub name: Spanned<String>,
-    #[rkyv(omit_bounds)]
     pub body: Vec<Spanned<LinkedMatchItem>>,
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum LinkedMatchQueryReference {
-    Global(SymbolId),
-    Raw(String),
+    Named(SymbolId),
+    Raw {
+        source: Spanned<String>,
+        captures: Vec<Spanned<String>>,
+    },
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkedQuery {
     pub id: SymbolId,
     pub name: String,
     pub query: String,
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkedExternDefinition {
     pub functions: Vec<Spanned<LinkedExternFunction>>,
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkedExternFunction {
     pub id: SymbolId,
     pub name: String,
@@ -159,15 +132,15 @@ pub struct LinkedExternFunction {
     pub return_ty: Option<LinkedTypeReference>,
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkedExternArgument {
     pub name: String,
     pub ty: LinkedTypeReference,
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkedFact {
     pub id: SymbolId,
     pub attributes: Vec<Spanned<LinkedAttribute>>,
@@ -175,8 +148,8 @@ pub struct LinkedFact {
     pub fields: Vec<Spanned<LinkedField>>,
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkedType {
     pub id: SymbolId,
     pub name: String,
@@ -184,134 +157,67 @@ pub struct LinkedType {
     pub definition: Spanned<LinkedTypeDefinition>,
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
-#[rkyv(
-    serialize_bounds(
-        __S: rkyv::ser::Writer + rkyv::ser::Allocator + rkyv::rancor::Fallible,
-        <__S as rkyv::rancor::Fallible>::Error: rkyv::rancor::Source,
-    ),
-    deserialize_bounds(
-        __D: rkyv::rancor::Fallible,
-        <__D as rkyv::rancor::Fallible>::Error: rkyv::rancor::Source,
-    ),
-    bytecheck(bounds(
-        __C: rkyv::validation::ArchiveContext,
-        <__C as rkyv::rancor::Fallible>::Error: rkyv::rancor::Source,
-    ))
-)]
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkedTypeDefinition {
     pub base_type: Option<LinkedTypeReference>,
-    #[rkyv(omit_bounds)]
-    pub fields: Vec<Spanned<LinkedTypeField>>,
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
-#[rkyv(
-    serialize_bounds(
-        __S: rkyv::ser::Writer + rkyv::ser::Allocator + rkyv::rancor::Fallible,
-        <__S as rkyv::rancor::Fallible>::Error: rkyv::rancor::Source,
-    ),
-    deserialize_bounds(
-        __D: rkyv::rancor::Fallible,
-        <__D as rkyv::rancor::Fallible>::Error: rkyv::rancor::Source,
-    ),
-    bytecheck(bounds(
-        __C: rkyv::validation::ArchiveContext,
-        <__C as rkyv::rancor::Fallible>::Error: rkyv::rancor::Source,
-    ))
-)]
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkedTypeField {
     pub name: String,
     pub definition: LinkedTypeDefinition,
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkedField {
     pub attributes: Vec<Spanned<LinkedAttribute>>,
     pub name: String,
     pub ty: LinkedTypeReference,
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkedAttribute {
     pub name: Spanned<String>,
     pub args: Vec<Spanned<LinkedExpression>>,
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
-#[rkyv(
-    serialize_bounds(
-        __S: rkyv::ser::Writer + rkyv::ser::Allocator + rkyv::rancor::Fallible,
-        <__S as rkyv::rancor::Fallible>::Error: rkyv::rancor::Source,
-    ),
-    deserialize_bounds(
-        __D: rkyv::rancor::Fallible,
-        <__D as rkyv::rancor::Fallible>::Error: rkyv::rancor::Source,
-    ),
-    bytecheck(bounds(
-        __C: rkyv::validation::ArchiveContext,
-        <__C as rkyv::rancor::Fallible>::Error: rkyv::rancor::Source,
-    ))
-)]
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct LinkedTypeReference {
     pub symbol: Spanned<ResolvedId>,
-    #[rkyv(omit_bounds)]
     pub args: Vec<Spanned<LinkedTypeReference>>,
     pub refinement: Option<Spanned<LinkedExpression>>,
 }
 
-#[derive(Debug, Clone, Archive, Serialize, Deserialize, PartialEq, Eq)]
-#[rkyv(derive(Debug))]
-#[rkyv(
-    serialize_bounds(
-        __S: rkyv::ser::Writer + rkyv::ser::Allocator + rkyv::rancor::Fallible,
-        <__S as rkyv::rancor::Fallible>::Error: rkyv::rancor::Source,
-    ),
-    deserialize_bounds(
-        __D: rkyv::rancor::Fallible,
-        <__D as rkyv::rancor::Fallible>::Error: rkyv::rancor::Source,
-    ),
-    bytecheck(bounds(
-        __C: rkyv::validation::ArchiveContext,
-        <__C as rkyv::rancor::Fallible>::Error: rkyv::rancor::Source,
-    ))
-)]
+
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum LinkedExpression {
     Identifier(ResolvedId),
     Number(String),
     StringLit(String),
 
     Binary {
-        #[rkyv(omit_bounds)]
         left: Box<Spanned<LinkedExpression>>,
         operator: Spanned<ResolvedId>,
-        #[rkyv(omit_bounds)]
         right: Box<Spanned<LinkedExpression>>,
     },
 
     PartialComparison {
         operator: Spanned<ResolvedId>,
-        #[rkyv(omit_bounds)]
         right: Box<Spanned<LinkedExpression>>,
     },
 
     Call {
-        #[rkyv(omit_bounds)]
         function: Box<Spanned<LinkedExpression>>,
-        #[rkyv(omit_bounds)]
         args: Vec<Spanned<LinkedExpression>>,
     },
 
-    InList(#[rkyv(omit_bounds)] Vec<Spanned<LinkedExpression>>),
+    InList(Vec<Spanned<LinkedExpression>>),
     InRange {
-        #[rkyv(omit_bounds)]
         start: Box<Spanned<LinkedExpression>>,
-        #[rkyv(omit_bounds)]
         end: Option<Box<Spanned<LinkedExpression>>>,
     },
 }

@@ -4,74 +4,349 @@ expression: "(&original, archived)"
 ---
 (
     Bundle {
-        symbol_table: SymbolTable {
-            name_to_id: {
-                "core.Base": SymbolId(
-                    1,
-                ),
-            },
-            symbols: {
-                SymbolId(
-                    1,
-                ): SymbolMetadata {
-                    id: SymbolId(
+        world: TypedWorld {
+            table: SymbolTable {
+                name_to_id: {
+                    "app.main.User": SymbolId(
+                        5,
+                    ),
+                    "builtin.bool": SymbolId(
+                        3,
+                    ),
+                    "builtin.f64": SymbolId(
+                        2,
+                    ),
+                    "builtin.i64": SymbolId(
                         1,
                     ),
-                    fqmn: "core.Base",
-                    kind: Fact,
-                    location: Location {
-                        file_id: FileId(
-                            42,
-                        ),
-                        span: Span {
-                            start: 0,
-                            end: 100,
-                            line: 0,
-                            col: 0,
-                            line_end: 0,
-                            col_end: 0,
-                        },
-                    },
-                    visibility: ModulePrivate,
-                    package: "main",
-                    module: "core",
+                    "builtin.list": SymbolId(
+                        4,
+                    ),
+                    "builtin.str": SymbolId(
+                        0,
+                    ),
+                    "core.models.Base": SymbolId(
+                        6,
+                    ),
                 },
-            },
-            next_id: 2,
-        },
-        modules: {
-            "core": LinkedModule {
-                file_id: FileId(
-                    42,
-                ),
-                facts: [
-                    LinkedFact {
+                symbols: {
+                    SymbolId(
+                        0,
+                    ): SymbolMetadata {
+                        id: SymbolId(
+                            0,
+                        ),
+                        fqmn: "builtin.str",
+                        kind: Type {
+                            base_type: None,
+                            fields: [],
+                            is_primitive: true,
+                        },
+                        location: Location {
+                            file_id: FileId(
+                                18446744073709551615,
+                            ),
+                            span: Span {
+                                start: 0,
+                                end: 0,
+                                line: 0,
+                                col: 0,
+                                line_end: 0,
+                                col_end: 0,
+                            },
+                        },
+                        visibility: Public,
+                        package: "builtin",
+                        module: "builtin",
+                    },
+                    SymbolId(
+                        1,
+                    ): SymbolMetadata {
                         id: SymbolId(
                             1,
                         ),
-                        attributes: [],
-                        name: "Base",
-                        fields: [
-                            LinkedField {
-                                attributes: [],
-                                name: "id",
-                                ty: LinkedTypeReference {
-                                    symbol: Global(
-                                        SymbolId(
-                                            100,
-                                        ) @ Span { start: 0, end: 5, line: 0, col: 0, line_end: 0, col_end: 0 },
-                                    ) @ Span { start: 0, end: 5, line: 0, col: 0, line_end: 0, col_end: 0 },
-                                    args: [],
-                                    refinement: None,
+                        fqmn: "builtin.i64",
+                        kind: Type {
+                            base_type: None,
+                            fields: [],
+                            is_primitive: true,
+                        },
+                        location: Location {
+                            file_id: FileId(
+                                18446744073709551615,
+                            ),
+                            span: Span {
+                                start: 0,
+                                end: 0,
+                                line: 0,
+                                col: 0,
+                                line_end: 0,
+                                col_end: 0,
+                            },
+                        },
+                        visibility: Public,
+                        package: "builtin",
+                        module: "builtin",
+                    },
+                    SymbolId(
+                        2,
+                    ): SymbolMetadata {
+                        id: SymbolId(
+                            2,
+                        ),
+                        fqmn: "builtin.f64",
+                        kind: Type {
+                            base_type: None,
+                            fields: [],
+                            is_primitive: true,
+                        },
+                        location: Location {
+                            file_id: FileId(
+                                18446744073709551615,
+                            ),
+                            span: Span {
+                                start: 0,
+                                end: 0,
+                                line: 0,
+                                col: 0,
+                                line_end: 0,
+                                col_end: 0,
+                            },
+                        },
+                        visibility: Public,
+                        package: "builtin",
+                        module: "builtin",
+                    },
+                    SymbolId(
+                        3,
+                    ): SymbolMetadata {
+                        id: SymbolId(
+                            3,
+                        ),
+                        fqmn: "builtin.bool",
+                        kind: Type {
+                            base_type: None,
+                            fields: [],
+                            is_primitive: true,
+                        },
+                        location: Location {
+                            file_id: FileId(
+                                18446744073709551615,
+                            ),
+                            span: Span {
+                                start: 0,
+                                end: 0,
+                                line: 0,
+                                col: 0,
+                                line_end: 0,
+                                col_end: 0,
+                            },
+                        },
+                        visibility: Public,
+                        package: "builtin",
+                        module: "builtin",
+                    },
+                    SymbolId(
+                        4,
+                    ): SymbolMetadata {
+                        id: SymbolId(
+                            4,
+                        ),
+                        fqmn: "builtin.list",
+                        kind: Type {
+                            base_type: None,
+                            fields: [],
+                            is_primitive: true,
+                        },
+                        location: Location {
+                            file_id: FileId(
+                                18446744073709551615,
+                            ),
+                            span: Span {
+                                start: 0,
+                                end: 0,
+                                line: 0,
+                                col: 0,
+                                line_end: 0,
+                                col_end: 0,
+                            },
+                        },
+                        visibility: Public,
+                        package: "builtin",
+                        module: "builtin",
+                    },
+                    SymbolId(
+                        5,
+                    ): SymbolMetadata {
+                        id: SymbolId(
+                            5,
+                        ),
+                        fqmn: "app.main.User",
+                        kind: Fact {
+                            fields: [
+                                FieldMetadata {
+                                    name: "info",
+                                    type_id: SymbolId(
+                                        6,
+                                    ),
+                                    attributes: [],
+                                    location: Location {
+                                        file_id: FileId(
+                                            0,
+                                        ),
+                                        span: Span {
+                                            start: 31,
+                                            end: 54,
+                                            line: 2,
+                                            col: 13,
+                                            line_end: 1,
+                                            col_end: 35,
+                                        },
+                                    },
                                 },
-                            } @ Span { start: 10, end: 20, line: 0, col: 0, line_end: 0, col_end: 0 },
-                        ],
-                    } @ Span { start: 0, end: 100, line: 0, col: 0, line_end: 0, col_end: 0 },
-                ],
-                types: [],
-                externs: [],
-                queries: [],
-                nodes: [],
+                            ],
+                        },
+                        location: Location {
+                            file_id: FileId(
+                                0,
+                            ),
+                            span: Span {
+                                start: 24,
+                                end: 28,
+                                line: 2,
+                                col: 6,
+                                line_end: 1,
+                                col_end: 9,
+                            },
+                        },
+                        visibility: ModulePrivate,
+                        package: "app",
+                        module: "app.main",
+                    },
+                    SymbolId(
+                        6,
+                    ): SymbolMetadata {
+                        id: SymbolId(
+                            6,
+                        ),
+                        fqmn: "core.models.Base",
+                        kind: Fact {
+                            fields: [
+                                FieldMetadata {
+                                    name: "id",
+                                    type_id: SymbolId(
+                                        0,
+                                    ),
+                                    attributes: [],
+                                    location: Location {
+                                        file_id: FileId(
+                                            1,
+                                        ),
+                                        span: Span {
+                                            start: 16,
+                                            end: 32,
+                                            line: 1,
+                                            col: 17,
+                                            line_end: 0,
+                                            col_end: 32,
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                        location: Location {
+                            file_id: FileId(
+                                1,
+                            ),
+                            span: Span {
+                                start: 9,
+                                end: 13,
+                                line: 1,
+                                col: 10,
+                                line_end: 0,
+                                col_end: 13,
+                            },
+                        },
+                        visibility: Public,
+                        package: "core",
+                        module: "core.models",
+                    },
+                },
+                next_id: 5,
+            },
+            modules: {
+                "app.main": TypedModule {
+                    file_id: FileId(
+                        0,
+                    ),
+                    grammar: None,
+                    facts: [
+                        TypedFact {
+                            id: SymbolId(
+                                5,
+                            ),
+                            attributes: [],
+                            name: "User",
+                            fields: [
+                                TypedField {
+                                    attributes: [],
+                                    name: "info",
+                                    ty: TypedTypeReference {
+                                        ty: Fact(
+                                            SymbolId(
+                                                6,
+                                            ),
+                                        ),
+                                        symbol: SymbolId(
+                                            6,
+                                        ) @ Span { start: 37, end: 53, line: 2, col: 19, line_end: 1, col_end: 34 },
+                                        args: [],
+                                        refinement: None,
+                                    },
+                                } @ Span { start: 31, end: 54, line: 2, col: 13, line_end: 1, col_end: 35 },
+                            ],
+                        } @ Span { start: 19, end: 55, line: 2, col: 1, line_end: 1, col_end: 36 },
+                    ],
+                    types: [],
+                    externs: [],
+                    queries: [],
+                    nodes: [],
+                    edges: [],
+                },
+                "core.models": TypedModule {
+                    file_id: FileId(
+                        1,
+                    ),
+                    grammar: None,
+                    facts: [
+                        TypedFact {
+                            id: SymbolId(
+                                6,
+                            ),
+                            attributes: [],
+                            name: "Base",
+                            fields: [
+                                TypedField {
+                                    attributes: [],
+                                    name: "id",
+                                    ty: TypedTypeReference {
+                                        ty: Str,
+                                        symbol: SymbolId(
+                                            0,
+                                        ) @ Span { start: 20, end: 31, line: 1, col: 21, line_end: 0, col_end: 31 },
+                                        args: [],
+                                        refinement: None,
+                                    },
+                                } @ Span { start: 16, end: 32, line: 1, col: 17, line_end: 0, col_end: 32 },
+                            ],
+                        } @ Span { start: 0, end: 33, line: 1, col: 1, line_end: 0, col_end: 33 },
+                    ],
+                    types: [],
+                    externs: [],
+                    queries: [],
+                    nodes: [],
+                    edges: [],
+                },
             },
         },
         wasm_modules: {
@@ -82,78 +357,360 @@ expression: "(&original, archived)"
                 239,
             ],
         },
-        files: {},
+        files: {
+            FileId(
+                0,
+            ): "import core.models\nfact User { info: core.models.Base }",
+            FileId(
+                1,
+            ): "pub fact Base { id: builtin.str }",
+        },
         grammars: {},
     },
     ArchivedBundle {
-        symbol_table: ArchivedSymbolTable {
-            name_to_id: {
-                "core.Base": ArchivedSymbolId(
-                    1,
-                ),
-            },
-            symbols: {
-                ArchivedSymbolId(
-                    1,
-                ): ArchivedSymbolMetadata {
-                    id: ArchivedSymbolId(
+        world: ArchivedTypedWorld {
+            table: ArchivedSymbolTable {
+                name_to_id: {
+                    "app.main.User": ArchivedSymbolId(
+                        5,
+                    ),
+                    "builtin.bool": ArchivedSymbolId(
+                        3,
+                    ),
+                    "builtin.f64": ArchivedSymbolId(
+                        2,
+                    ),
+                    "builtin.i64": ArchivedSymbolId(
                         1,
                     ),
-                    fqmn: "core.Base",
-                    kind: Fact,
-                    location: ArchivedLocation {
-                        file_id: ArchivedFileId(
-                            42,
-                        ),
-                        span: ArchivedSpan {
-                            start: 0,
-                            end: 100,
-                            line: 0,
-                            col: 0,
-                            line_end: 0,
-                            col_end: 0,
-                        },
-                    },
-                    visibility: ModulePrivate,
-                    package: "main",
-                    module: "core",
+                    "builtin.list": ArchivedSymbolId(
+                        4,
+                    ),
+                    "builtin.str": ArchivedSymbolId(
+                        0,
+                    ),
+                    "core.models.Base": ArchivedSymbolId(
+                        6,
+                    ),
                 },
-            },
-            next_id: 2,
-        },
-        modules: {
-            "core": ArchivedLinkedModule {
-                file_id: ArchivedFileId(
-                    42,
-                ),
-                facts: [
-                    ArchivedLinkedFact {
+                symbols: {
+                    ArchivedSymbolId(
+                        0,
+                    ): ArchivedSymbolMetadata {
+                        id: ArchivedSymbolId(
+                            0,
+                        ),
+                        fqmn: "builtin.str",
+                        kind: Type {
+                            base_type: None,
+                            fields: [],
+                            is_primitive: true,
+                        },
+                        location: ArchivedLocation {
+                            file_id: ArchivedFileId(
+                                4294967295,
+                            ),
+                            span: ArchivedSpan {
+                                start: 0,
+                                end: 0,
+                                line: 0,
+                                col: 0,
+                                line_end: 0,
+                                col_end: 0,
+                            },
+                        },
+                        visibility: Public,
+                        package: "builtin",
+                        module: "builtin",
+                    },
+                    ArchivedSymbolId(
+                        1,
+                    ): ArchivedSymbolMetadata {
                         id: ArchivedSymbolId(
                             1,
                         ),
-                        attributes: [],
-                        name: "Base",
-                        fields: [
-                            ArchivedLinkedField {
-                                attributes: [],
-                                name: "id",
-                                ty: ArchivedLinkedTypeReference {
-                                    symbol: Global(
-                                        ArchivedSymbolId(
-                                            100,
-                                        ) @ ArchivedSpan { start: 0, end: 5, line: 0, col: 0, line_end: 0, col_end: 0 },
-                                    ) @ ArchivedSpan { start: 0, end: 5, line: 0, col: 0, line_end: 0, col_end: 0 },
-                                    args: [],
-                                    refinement: None,
+                        fqmn: "builtin.i64",
+                        kind: Type {
+                            base_type: None,
+                            fields: [],
+                            is_primitive: true,
+                        },
+                        location: ArchivedLocation {
+                            file_id: ArchivedFileId(
+                                4294967295,
+                            ),
+                            span: ArchivedSpan {
+                                start: 0,
+                                end: 0,
+                                line: 0,
+                                col: 0,
+                                line_end: 0,
+                                col_end: 0,
+                            },
+                        },
+                        visibility: Public,
+                        package: "builtin",
+                        module: "builtin",
+                    },
+                    ArchivedSymbolId(
+                        2,
+                    ): ArchivedSymbolMetadata {
+                        id: ArchivedSymbolId(
+                            2,
+                        ),
+                        fqmn: "builtin.f64",
+                        kind: Type {
+                            base_type: None,
+                            fields: [],
+                            is_primitive: true,
+                        },
+                        location: ArchivedLocation {
+                            file_id: ArchivedFileId(
+                                4294967295,
+                            ),
+                            span: ArchivedSpan {
+                                start: 0,
+                                end: 0,
+                                line: 0,
+                                col: 0,
+                                line_end: 0,
+                                col_end: 0,
+                            },
+                        },
+                        visibility: Public,
+                        package: "builtin",
+                        module: "builtin",
+                    },
+                    ArchivedSymbolId(
+                        3,
+                    ): ArchivedSymbolMetadata {
+                        id: ArchivedSymbolId(
+                            3,
+                        ),
+                        fqmn: "builtin.bool",
+                        kind: Type {
+                            base_type: None,
+                            fields: [],
+                            is_primitive: true,
+                        },
+                        location: ArchivedLocation {
+                            file_id: ArchivedFileId(
+                                4294967295,
+                            ),
+                            span: ArchivedSpan {
+                                start: 0,
+                                end: 0,
+                                line: 0,
+                                col: 0,
+                                line_end: 0,
+                                col_end: 0,
+                            },
+                        },
+                        visibility: Public,
+                        package: "builtin",
+                        module: "builtin",
+                    },
+                    ArchivedSymbolId(
+                        4,
+                    ): ArchivedSymbolMetadata {
+                        id: ArchivedSymbolId(
+                            4,
+                        ),
+                        fqmn: "builtin.list",
+                        kind: Type {
+                            base_type: None,
+                            fields: [],
+                            is_primitive: true,
+                        },
+                        location: ArchivedLocation {
+                            file_id: ArchivedFileId(
+                                4294967295,
+                            ),
+                            span: ArchivedSpan {
+                                start: 0,
+                                end: 0,
+                                line: 0,
+                                col: 0,
+                                line_end: 0,
+                                col_end: 0,
+                            },
+                        },
+                        visibility: Public,
+                        package: "builtin",
+                        module: "builtin",
+                    },
+                    ArchivedSymbolId(
+                        5,
+                    ): ArchivedSymbolMetadata {
+                        id: ArchivedSymbolId(
+                            5,
+                        ),
+                        fqmn: "app.main.User",
+                        kind: Fact {
+                            fields: [
+                                ArchivedFieldMetadata {
+                                    name: "info",
+                                    type_id: ArchivedSymbolId(
+                                        6,
+                                    ),
+                                    attributes: [],
+                                    location: ArchivedLocation {
+                                        file_id: ArchivedFileId(
+                                            0,
+                                        ),
+                                        span: ArchivedSpan {
+                                            start: 31,
+                                            end: 54,
+                                            line: 2,
+                                            col: 13,
+                                            line_end: 1,
+                                            col_end: 35,
+                                        },
+                                    },
                                 },
-                            } @ ArchivedSpan { start: 10, end: 20, line: 0, col: 0, line_end: 0, col_end: 0 },
-                        ],
-                    } @ ArchivedSpan { start: 0, end: 100, line: 0, col: 0, line_end: 0, col_end: 0 },
-                ],
-                types: [],
-                externs: [],
-                queries: [],
-                nodes: [],
+                            ],
+                        },
+                        location: ArchivedLocation {
+                            file_id: ArchivedFileId(
+                                0,
+                            ),
+                            span: ArchivedSpan {
+                                start: 24,
+                                end: 28,
+                                line: 2,
+                                col: 6,
+                                line_end: 1,
+                                col_end: 9,
+                            },
+                        },
+                        visibility: ModulePrivate,
+                        package: "app",
+                        module: "app.main",
+                    },
+                    ArchivedSymbolId(
+                        6,
+                    ): ArchivedSymbolMetadata {
+                        id: ArchivedSymbolId(
+                            6,
+                        ),
+                        fqmn: "core.models.Base",
+                        kind: Fact {
+                            fields: [
+                                ArchivedFieldMetadata {
+                                    name: "id",
+                                    type_id: ArchivedSymbolId(
+                                        0,
+                                    ),
+                                    attributes: [],
+                                    location: ArchivedLocation {
+                                        file_id: ArchivedFileId(
+                                            1,
+                                        ),
+                                        span: ArchivedSpan {
+                                            start: 16,
+                                            end: 32,
+                                            line: 1,
+                                            col: 17,
+                                            line_end: 0,
+                                            col_end: 32,
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                        location: ArchivedLocation {
+                            file_id: ArchivedFileId(
+                                1,
+                            ),
+                            span: ArchivedSpan {
+                                start: 9,
+                                end: 13,
+                                line: 1,
+                                col: 10,
+                                line_end: 0,
+                                col_end: 13,
+                            },
+                        },
+                        visibility: Public,
+                        package: "core",
+                        module: "core.models",
+                    },
+                },
+                next_id: 5,
+            },
+            modules: {
+                "app.main": ArchivedTypedModule {
+                    file_id: ArchivedFileId(
+                        0,
+                    ),
+                    grammar: None,
+                    facts: [
+                        ArchivedTypedFact {
+                            id: ArchivedSymbolId(
+                                5,
+                            ),
+                            attributes: [],
+                            name: "User",
+                            fields: [
+                                ArchivedTypedField {
+                                    attributes: [],
+                                    name: "info",
+                                    ty: ArchivedTypedTypeReference {
+                                        ty: Fact(
+                                            ArchivedSymbolId(
+                                                6,
+                                            ),
+                                        ),
+                                        symbol: ArchivedSymbolId(
+                                            6,
+                                        ) @ ArchivedSpan { start: 37, end: 53, line: 2, col: 19, line_end: 1, col_end: 34 },
+                                        args: [],
+                                        refinement: None,
+                                    },
+                                } @ ArchivedSpan { start: 31, end: 54, line: 2, col: 13, line_end: 1, col_end: 35 },
+                            ],
+                        } @ ArchivedSpan { start: 19, end: 55, line: 2, col: 1, line_end: 1, col_end: 36 },
+                    ],
+                    types: [],
+                    externs: [],
+                    queries: [],
+                    nodes: [],
+                    edges: [],
+                },
+                "core.models": ArchivedTypedModule {
+                    file_id: ArchivedFileId(
+                        1,
+                    ),
+                    grammar: None,
+                    facts: [
+                        ArchivedTypedFact {
+                            id: ArchivedSymbolId(
+                                6,
+                            ),
+                            attributes: [],
+                            name: "Base",
+                            fields: [
+                                ArchivedTypedField {
+                                    attributes: [],
+                                    name: "id",
+                                    ty: ArchivedTypedTypeReference {
+                                        ty: Str,
+                                        symbol: ArchivedSymbolId(
+                                            0,
+                                        ) @ ArchivedSpan { start: 20, end: 31, line: 1, col: 21, line_end: 0, col_end: 31 },
+                                        args: [],
+                                        refinement: None,
+                                    },
+                                } @ ArchivedSpan { start: 16, end: 32, line: 1, col: 17, line_end: 0, col_end: 32 },
+                            ],
+                        } @ ArchivedSpan { start: 0, end: 33, line: 1, col: 1, line_end: 0, col_end: 33 },
+                    ],
+                    types: [],
+                    externs: [],
+                    queries: [],
+                    nodes: [],
+                    edges: [],
+                },
             },
         },
         wasm_modules: {
@@ -164,7 +721,14 @@ expression: "(&original, archived)"
                 239,
             ],
         },
-        files: {},
+        files: {
+            ArchivedFileId(
+                0,
+            ): "import core.models\nfact User { info: core.models.Base }",
+            ArchivedFileId(
+                1,
+            ): "pub fact Base { id: builtin.str }",
+        },
         grammars: {},
     },
 )

@@ -27,12 +27,13 @@ pub fn run(path: PathBuf) -> Result<()> {
     );
     println!("{}", "-".repeat(80));
 
-    for (symbol_id, meta) in program.symbol_table.symbols.iter() {
+    for (symbol_id, meta) in program.world.table.symbols.iter() {
         let kind_str = format!("{:?}", meta.kind);
         let span = &meta.location.span;
         let file_id = &meta.location.file_id;
         let fqdm = program
-            .symbol_table
+            .world
+            .table
             .symbols
             .get(symbol_id)
             .map(|m| m.fqmn.as_str())
@@ -78,7 +79,7 @@ pub fn run(path: PathBuf) -> Result<()> {
     }
 
     println!("\n{}", style("Modules Structure:").underlined().yellow());
-    for (mod_name, module) in program.modules.iter() {
+    for (mod_name, module) in program.world.modules.iter() {
         println!("  {} ", style(mod_name).bold().green());
 
         for fact in module.facts.iter() {

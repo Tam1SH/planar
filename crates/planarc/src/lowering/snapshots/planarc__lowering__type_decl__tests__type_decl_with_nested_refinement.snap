@@ -16,9 +16,7 @@ TypeDeclaration {
                         name: "Int" @ Span { start: 26, end: 29, line: 1, col: 27, line_end: 0, col_end: 29 },
                         refinement: Some(
                             Binary {
-                                left: Identifier(
-                                    "it",
-                                ) @ Span { start: 36, end: 38, line: 1, col: 37, line_end: 0, col_end: 38 },
+                                left: It @ Span { start: 36, end: 38, line: 1, col: 37, line_end: 0, col_end: 38 },
                                 op: ">" @ Span { start: 39, end: 40, line: 1, col: 40, line_end: 0, col_end: 40 },
                                 right: Number(
                                     "0",
@@ -30,6 +28,5 @@ TypeDeclaration {
                 ],
             },
         ),
-        fields: [],
     } @ Span { start: 20, end: 43, line: 1, col: 21, line_end: 0, col_end: 43 },
 } @ Span { start: 0, end: 43, line: 1, col: 1, line_end: 0, col_end: 43 }

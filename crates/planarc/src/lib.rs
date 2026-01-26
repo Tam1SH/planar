@@ -1,13 +1,17 @@
 mod ast;
+mod checked;
 mod db;
 pub mod error;
 mod lowering;
 mod manifest;
 mod pdl;
-mod source_registry;
+mod scope;
+pub mod source_registry;
 mod spanned;
+mod typechecker;
 mod unit;
 mod utils;
+
 pub mod validator;
 
 pub mod artifact;

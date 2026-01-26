@@ -34,6 +34,10 @@ where
         self.0.push(error);
     }
 
+    pub fn extend(&mut self, other: Vec<Box<E>>) {
+        self.0.extend(other);
+    }
+
     pub fn is_empty(&self) -> bool {
         self.0.is_empty()
     }
@@ -47,6 +51,14 @@ where
     }
 }
 
+impl<E> Default for ErrorCollection<E>
+where
+    E: DiagnosticWithLocation,
+{
+    fn default() -> Self {
+        Self::new(vec![])
+    }
+}
 impl<E> IntoIterator for ErrorCollection<E>
 where
     E: DiagnosticWithLocation,

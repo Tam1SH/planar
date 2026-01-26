@@ -15,7 +15,7 @@ pub struct SourceRegistry {
 
 impl SourceRegistry {
     pub fn add_with_id(&mut self, source: MietteSource, id: FileId) {
-        self.files.insert(FileId(id.0 + 1), source);
+        self.files.insert(id, source);
     }
 
     pub fn get(&self, id: FileId) -> Option<&MietteSource> {
@@ -23,17 +23,16 @@ impl SourceRegistry {
     }
 
     pub fn get_source_and_span(&self, loc: Location) -> (MietteSource, SourceSpan) {
-        let source = self
-            .files
-            .get(&loc.file_id)
-            .expect("Invalid file_id: Registry out of sync with AST/Locations");
+        let source = self.files.get(&loc.file_id).unwrap_or_else(|| {
+            panic!(
+                "Invalid file_id: Registry out of sync with AST/Locations, got: {:?}",
+                loc
+            )
+        });
 
         let named_source = Arc::clone(source);
 
-        let span = SourceSpan::new(
-            loc.span.start.into(),
-            loc.span.end - loc.span.start,
-        );
+        let span = SourceSpan::new(loc.span.start.into(), loc.span.end - loc.span.start);
 
         (named_source, span)
     }

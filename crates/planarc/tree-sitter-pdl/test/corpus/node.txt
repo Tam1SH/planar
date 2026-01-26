@@ -314,7 +314,7 @@ pub(pkg) type ListPositiveInt = List (i64 where it > 0)
 pub type Something = i64 where std.math.is_positive (std.math.add it 10)
 #wit-compatible
 #export
-type A = { x: Int y: { z: ParsableInt w: List (i64 where it > 0) } }
+type A = A
 
 ---
 
@@ -375,39 +375,10 @@ type A = { x: Int y: { z: ParsableInt w: List (i64 where it > 0) } }
       (identifier))
     (identifier)
     (type_definition
-      (type_field_definition
-        (identifier)
-        (type_definition
-          (type_annotation
-            (type_identifier
-              (fqmn
-                (identifier))))))
-      (type_field_definition
-        (identifier)
-        (type_definition
-          (type_field_definition
-            (identifier)
-            (type_definition
-              (type_annotation
-                (type_identifier
-                  (fqmn
-                    (identifier))))))
-          (type_field_definition
-            (identifier)
-            (type_definition
-              (type_annotation
-                (type_application
-                  (type_identifier
-                    (fqmn
-                      (identifier)))
-                  (type_annotation
-                    (type_identifier
-                      (fqmn
-                        (identifier)))
-                    (refinement
-                      (it)
-                      (operator_identifier)
-                      (number))))))))))))
+      (type_annotation
+        (type_identifier
+          (fqmn
+            (identifier)))))))
 
 ==================
 Edge Declaration
@@ -467,6 +438,7 @@ Emit Fact
 node A {
   match A {
     emit File { path: context.current_file.path } -[main.Includes]-> File { path: @cap.text }
+    emit File { path: context.current_file.path }
   }
 }
 ---
@@ -501,6 +473,17 @@ node A {
               (emmited_fact_field
                 (identifier)
                 (fqmn
+                  (identifier)
+                  (identifier)))))
+          (emit
+            (emmited_fact
+              (type_identifier
+                (fqmn
+                  (identifier)))
+              (emmited_fact_field
+                (identifier)
+                (fqmn
+                  (identifier)
                   (identifier)
                   (identifier))))))))))
 

@@ -4,7 +4,7 @@ use crate::lowering::type_decl::{lower_expression_atom, lower_type_annotation};
 use crate::pdl;
 use crate::{
     ast::*,
-    spanned::{Span, Spanned}
+    spanned::{Span, Spanned},
 };
 
 use type_sitter::{HasChild, HasChildren, IncorrectKind, Node, NodeResult};

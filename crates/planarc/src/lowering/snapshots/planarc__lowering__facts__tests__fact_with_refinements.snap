@@ -14,9 +14,7 @@ FactDefinition {
                 name: "Float" @ Span { start: 52, end: 57, line: 3, col: 24, line_end: 2, col_end: 28 },
                 refinement: Some(
                     Binary {
-                        left: Identifier(
-                            "it",
-                        ) @ Span { start: 64, end: 66, line: 3, col: 36, line_end: 2, col_end: 37 },
+                        left: It @ Span { start: 64, end: 66, line: 3, col: 36, line_end: 2, col_end: 37 },
                         op: ">" @ Span { start: 67, end: 68, line: 3, col: 39, line_end: 2, col_end: 39 },
                         right: Call {
                             function: Number(
@@ -49,9 +47,7 @@ FactDefinition {
                 name: "Int" @ Span { start: 133, end: 136, line: 5, col: 24, line_end: 4, col_end: 26 },
                 refinement: Some(
                     Binary {
-                        left: Identifier(
-                            "it",
-                        ) @ Span { start: 143, end: 145, line: 5, col: 34, line_end: 4, col_end: 35 },
+                        left: It @ Span { start: 143, end: 145, line: 5, col: 34, line_end: 4, col_end: 35 },
                         op: "in" @ Span { start: 146, end: 157, line: 5, col: 37, line_end: 4, col_end: 47 },
                         right: InRange {
                             start: Number(

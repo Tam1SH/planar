@@ -97,26 +97,36 @@ fn lower_match_stmt<'a>(
 }
 
 fn lower_emit<'a>(ctx: &Ctx, node: pdl::Emit<'a>) -> NodeResult<'a, EmitStatement> {
-    let left = lower_emitted_fact(ctx, node.left_fact()?)?;
-    let right = lower_emitted_fact(ctx, node.right_fact()?)?;
+    let left_node = node.left_fact()?;
+    let left = lower_emitted_fact(ctx, left_node)?;
 
-    let rel_node = node.relation()?;
-    let rel_name = ctx.spanned(&rel_node.fqmn()?, ctx.text(&rel_node.fqmn()?));
+    let right = node
+        .right_fact()
+        .transpose()?
+        .map(|rn| lower_emitted_fact(ctx, rn))
+        .transpose()?;
 
-    let has_left = rel_node.left().is_some();
-    let has_right = rel_node.right().is_some();
+    let mut relation = None;
+    let mut direction = None;
 
-    let direction = match (has_left, has_right) {
-        (true, true) => RelationDirection::Both,
-        (true, false) => RelationDirection::Left,
-        (false, true) => RelationDirection::Right,
-        (false, false) => return Err(IncorrectKind::new::<pdl::Relation>(*rel_node.raw())),
-    };
+    if let Some(rel_node) = node.relation().transpose()? {
+        relation = Some(ctx.spanned(&rel_node.fqmn()?, ctx.text(&rel_node.fqmn()?)));
+
+        let has_left = rel_node.left().is_some();
+        let has_right = rel_node.right().is_some();
+
+        direction = Some(match (has_left, has_right) {
+            (true, true) => RelationDirection::Both,
+            (true, false) => RelationDirection::Left,
+            (false, true) => RelationDirection::Right,
+            (false, false) => return Err(IncorrectKind::new::<pdl::Relation>(*rel_node.raw())),
+        });
+    }
 
     Ok(EmitStatement {
         left,
         right,
-        relation: rel_name,
+        relation,
         direction,
     })
 }
@@ -213,11 +223,8 @@ fn lower_emitted_field_assignment<'a>(
     ctx: &Ctx,
     node: pdl::EmmitedFactField<'a>,
 ) -> NodeResult<'a, Spanned<EmittedFieldAssignment>> {
-    
     let name = node.field().map(|f| ctx.spanned(&f, ctx.text(&f)))?;
-    let value = node
-        .value()
-        .map(|v| lower_expression_atom(ctx, v))??;
+    let value = node.value().map(|v| lower_expression_atom(ctx, v))??;
 
     Ok(ctx.spanned(&node, EmittedFieldAssignment { name, value }))
 }

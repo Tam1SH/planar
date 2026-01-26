@@ -424,9 +424,9 @@ impl<'tree> ::type_sitter::Node<'tree> for EdgeDefinition<'tree> {
 This node has these fields:
 
 - `left_fact`: `emmited_fact` ([`EmmitedFact`])
-- `right_fact`: `emmited_fact` ([`EmmitedFact`])
+- `right_fact`: `emmited_fact?` ([`EmmitedFact`])
 
-And an additional named child of type `relation` ([`Relation`])
+And an optional additional named child of type `relation?` ([`Relation`])
 */
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[repr(transparent)]
@@ -447,23 +447,24 @@ This child has type `emmited_fact` ([`EmmitedFact`])*/
                 "required child not present, there should at least be a MISSING node in its place",
             )
     }
-    /**Get the field `right_fact`.
+    /**Get the optional field `right_fact`.
 
-This child has type `emmited_fact` ([`EmmitedFact`])*/
+This child has type `emmited_fact?` ([`EmmitedFact`])*/
     #[inline]
-    pub fn right_fact(&self) -> ::type_sitter::NodeResult<'tree, EmmitedFact<'tree>> {
+    pub fn right_fact(
+        &self,
+    ) -> ::std::option::Option<::type_sitter::NodeResult<'tree, EmmitedFact<'tree>>> {
         ::type_sitter::Node::raw(self)
             .child_by_field_name("right_fact")
             .map(<EmmitedFact<'tree> as ::type_sitter::Node<'tree>>::try_from_raw)
-            .expect(
-                "required child not present, there should at least be a MISSING node in its place",
-            )
     }
-    /**Get the node's only non-field not-extra named child.
+    /**Get the node's only non-field not-extra named child, if it has one.
 
-This child has type `relation` ([`Relation`])*/
+This child has type `relation?` ([`Relation`])*/
     #[inline]
-    pub fn relation(&self) -> ::type_sitter::NodeResult<'tree, Relation<'tree>> {
+    pub fn relation(
+        &self,
+    ) -> ::std::option::Option<::type_sitter::NodeResult<'tree, Relation<'tree>>> {
         (0..::type_sitter::Node::raw(self).named_child_count())
             .filter(|i| {
                 ::type_sitter::Node::raw(self)
@@ -474,9 +475,6 @@ This child has type `relation` ([`Relation`])*/
             .filter(|n| !n.is_extra())
             .next()
             .map(<Relation<'tree> as ::type_sitter::Node<'tree>>::try_from_raw)
-            .expect(
-                "required child not present, there should at least be a MISSING node in its place",
-            )
     }
 }
 #[automatically_derived]
@@ -2974,9 +2972,7 @@ impl<'tree> ::type_sitter::Node<'tree> for TypeDeclaration<'tree> {
 
 This node has these fields:
 
-- `type`: `type_annotation?` ([`TypeAnnotation`])
-
-And additional named children of type `type_field_definition*` ([`TypeFieldDefinition`])
+- `type`: `type_annotation` ([`TypeAnnotation`])
 */
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[repr(transparent)]
@@ -2985,39 +2981,16 @@ pub struct TypeDefinition<'tree>(::type_sitter::raw::Node<'tree>);
 #[automatically_derived]
 #[allow(unused)]
 impl<'tree> TypeDefinition<'tree> {
-    /**Get the optional field `type`.
+    /**Get the field `type`.
 
-This child has type `type_annotation?` ([`TypeAnnotation`])*/
+This child has type `type_annotation` ([`TypeAnnotation`])*/
     #[inline]
-    pub fn r#type(
-        &self,
-    ) -> ::std::option::Option<::type_sitter::NodeResult<'tree, TypeAnnotation<'tree>>> {
+    pub fn r#type(&self) -> ::type_sitter::NodeResult<'tree, TypeAnnotation<'tree>> {
         ::type_sitter::Node::raw(self)
             .child_by_field_name("type")
             .map(<TypeAnnotation<'tree> as ::type_sitter::Node<'tree>>::try_from_raw)
-    }
-    /**Get the node's non-field not-extra named children.
-
-These children have type `type_field_definition*` ([`TypeFieldDefinition`])*/
-    #[inline]
-    pub fn type_field_definitions<'a>(
-        &self,
-        c: &'a mut ::type_sitter::TreeCursor<'tree>,
-    ) -> impl ::std::iter::Iterator<
-        Item = ::type_sitter::NodeResult<'tree, TypeFieldDefinition<'tree>>,
-    > + 'a {
-        {
-            let me = *::type_sitter::Node::raw(self);
-            ::type_sitter::Node::raw(self)
-                .named_children(&mut c.0)
-                .enumerate()
-                .filter(move |(i, n)| {
-                    !n.is_extra() && me.field_name_for_named_child(*i as _).is_none()
-                })
-                .map(|(_, n)| n)
-        }
-            .map(
-                <TypeFieldDefinition<'tree> as ::type_sitter::Node<'tree>>::try_from_raw,
+            .expect(
+                "required child not present, there should at least be a MISSING node in its place",
             )
     }
 }
@@ -3038,77 +3011,6 @@ impl<'tree> ::type_sitter::Node<'tree> for TypeDefinition<'tree> {
     #[inline]
     unsafe fn from_raw_unchecked(node: ::type_sitter::raw::Node<'tree>) -> Self {
         debug_assert_eq!(node.kind(), "type_definition");
-        Self(node)
-    }
-    #[inline]
-    fn raw(&self) -> &::type_sitter::raw::Node<'tree> {
-        &self.0
-    }
-    #[inline]
-    fn raw_mut(&mut self) -> &mut ::type_sitter::raw::Node<'tree> {
-        &mut self.0
-    }
-    #[inline]
-    fn into_raw(self) -> ::type_sitter::raw::Node<'tree> {
-        self.0
-    }
-}
-/**Typed node `type_field_definition`
-
-This node has these fields:
-
-- `name`: `identifier` ([`Identifier`])
-- `type`: `type_definition` ([`TypeDefinition`])
-*/
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-#[repr(transparent)]
-#[allow(non_camel_case_types)]
-pub struct TypeFieldDefinition<'tree>(::type_sitter::raw::Node<'tree>);
-#[automatically_derived]
-#[allow(unused)]
-impl<'tree> TypeFieldDefinition<'tree> {
-    /**Get the field `name`.
-
-This child has type `identifier` ([`Identifier`])*/
-    #[inline]
-    pub fn name(&self) -> ::type_sitter::NodeResult<'tree, Identifier<'tree>> {
-        ::type_sitter::Node::raw(self)
-            .child_by_field_name("name")
-            .map(<Identifier<'tree> as ::type_sitter::Node<'tree>>::try_from_raw)
-            .expect(
-                "required child not present, there should at least be a MISSING node in its place",
-            )
-    }
-    /**Get the field `type`.
-
-This child has type `type_definition` ([`TypeDefinition`])*/
-    #[inline]
-    pub fn r#type(&self) -> ::type_sitter::NodeResult<'tree, TypeDefinition<'tree>> {
-        ::type_sitter::Node::raw(self)
-            .child_by_field_name("type")
-            .map(<TypeDefinition<'tree> as ::type_sitter::Node<'tree>>::try_from_raw)
-            .expect(
-                "required child not present, there should at least be a MISSING node in its place",
-            )
-    }
-}
-#[automatically_derived]
-impl<'tree> ::type_sitter::Node<'tree> for TypeFieldDefinition<'tree> {
-    type WithLifetime<'a> = TypeFieldDefinition<'a>;
-    const KIND: &'static str = "type_field_definition";
-    #[inline]
-    fn try_from_raw(
-        node: ::type_sitter::raw::Node<'tree>,
-    ) -> ::type_sitter::NodeResult<'tree, Self> {
-        if node.kind() == "type_field_definition" {
-            Ok(Self(node))
-        } else {
-            Err(::type_sitter::IncorrectKind::new::<Self>(node))
-        }
-    }
-    #[inline]
-    unsafe fn from_raw_unchecked(node: ::type_sitter::raw::Node<'tree>) -> Self {
-        debug_assert_eq!(node.kind(), "type_field_definition");
         Self(node)
     }
     #[inline]

@@ -7,9 +7,8 @@ pub fn lower_grammar_declaration<'a>(
     ctx: &Ctx,
     node: pdl::GrammarDeclaration<'a>,
 ) -> NodeResult<'a, Spanned<String>> {
-    
     let name_node = node.name()?;
-    
+
     let text = ctx.text(&name_node);
 
     Ok(ctx.spanned(&node, text))

@@ -55,7 +55,7 @@ pub fn lower_refinement_node<'a>(
     }
 }
 
-pub fn pub_vis_to_vis<'a>(pub_vis: Pub<'a>) -> NodeResult<'a, Visibility> {
+pub fn pub_vis_to_vis(pub_vis: Pub) -> NodeResult<Visibility> {
     if let Some(pkg) = pub_vis.pkg() {
         let _ = pkg?;
         Ok(Visibility::Package)
@@ -146,7 +146,7 @@ fn find_captures(
 
     if node.kind() == "capture" {
         let raw_name = node.utf8_text(source.as_bytes()).unwrap_or("");
-        let name = raw_name.trim_start_matches('@').to_string();
+        let name = raw_name.to_string();
 
         out.push(Spanned {
             value: name,

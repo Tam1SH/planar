@@ -1,0 +1,10 @@
+---
+source: crates/planarc/src/lowering/query.rs
+expression: ast
+---
+QueryDefinition {
+    vis: Private,
+    name: "empty" @ Span { start: 6, end: 11, line: 1, col: 7, line_end: 0, col_end: 11 },
+    value: "(node)" @ Span { start: 15, end: 21, line: 1, col: 16, line_end: 0, col_end: 21 },
+    captures: [],
+} @ Span { start: 0, end: 22, line: 1, col: 1, line_end: 0, col_end: 22 }

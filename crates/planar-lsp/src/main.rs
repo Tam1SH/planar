@@ -1,16 +1,17 @@
+use crate::loader::LspModuleLoader;
 use dashmap::DashMap;
 use planar_pkg::config::PlanarContext;
 use planar_pkg::packaging::resolver::{NoOpProgress, WorkspaceResolver};
-use planarc::compiler::error::DiagnosticWithLocation;
 use planarc::compiler::{CompilationResult, Compiler};
-use planarc::linker;
-use planarc::module_loader::PackageRoot;
+use planarc::error::DiagnosticWithLocation;
+use planarc::linker::meta;
 use std::cmp::Reverse;
-use std::collections::{BTreeMap, HashMap};
+use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 use tokio::sync::RwLock;
 use tower_lsp::jsonrpc::Result;
+use tower_lsp::lsp_types as lsp;
 use tower_lsp::lsp_types::*;
 use tower_lsp::{Client, LanguageServer, LspService, Server};
 use tree_sitter::StreamingIterator;
@@ -19,17 +20,16 @@ use tree_sitter_planardl::LANGUAGE;
 
 mod loader;
 
-use tower_lsp::lsp_types as lsp;
-
-use crate::loader::LspModuleLoader;
-
 fn map_to_lsp(err: &dyn DiagnosticWithLocation) -> lsp::Diagnostic {
     let loc = err.location();
     let span = loc.span;
 
     let range = lsp::Range {
-        start: lsp::Position::new(span.line.saturating_sub(1), span.col.saturating_sub(1)),
-        end: lsp::Position::new(span.line_end, span.col_end),
+        start: lsp::Position::new(
+            span.line.saturating_sub(1) as u32,
+            span.col.saturating_sub(1) as u32,
+        ),
+        end: lsp::Position::new(span.line_end as u32, span.col_end as u32),
     };
 
     lsp::Diagnostic {
@@ -144,7 +144,7 @@ impl Backend {
                 for err in &result.errors.0 {
                     let loc = err.location();
                     if let Some(source) = result.registry.get(loc.file_id) {
-                        if let Ok(url) = Url::from_file_path(&source.origin) {
+                        if let Ok(url) = Url::from_file_path(&source.name()) {
                             let lsp_diag = map_to_lsp(err.as_ref());
                             diagnostics_by_file
                                 .entry(url.to_string())
@@ -301,10 +301,10 @@ impl LanguageServer for Backend {
             self.client
                 .log_message(
                     MessageType::INFO,
-                    format!("symbols count: {}", res.symbol_table.symbols.len()),
+                    format!("symbols count: {}", res.typed_world.table.symbols.len()),
                 )
                 .await;
-            for (fqmn, metadata) in &res.symbol_table.symbols {
+            for (fqmn, metadata) in &res.typed_world.table.symbols {
                 self.client
                     .log_message(
                         MessageType::INFO,
@@ -317,20 +317,20 @@ impl LanguageServer for Backend {
                     .await;
 
                 if let Some(source) = res.registry.get(metadata.location.file_id) {
-                    if let Ok(file_url) = Url::from_file_path(&source.origin) {
+                    if let Ok(file_url) = Url::from_file_path(&source.name()) {
                         if file_url.as_str() == uri {
                             let span = metadata.location.span;
 
                             let token_type = match metadata.kind {
-                                linker::meta::SymbolKind::ExternFunction => Some(3),
-                                linker::meta::SymbolKind::Type => Some(1),
+                                meta::SymbolKind::ExternFunction { .. } => Some(3),
+                                meta::SymbolKind::Type { .. } => Some(1),
                                 _ => None,
                             };
 
                             if let Some(ty) = token_type {
                                 raw_tokens.push(RawToken {
-                                    line: span.line.saturating_sub(1),
-                                    start: span.col.saturating_sub(1),
+                                    line: span.line.saturating_sub(1) as u32,
+                                    start: span.col.saturating_sub(1) as u32,
                                     length: (span.end - span.start) as u32,
                                     token_type: ty,
                                     priority: 1,

@@ -44,7 +44,60 @@ impl<T> Spanned<T> {
     pub fn new(value: T, loc: Location) -> Self {
         Self { value, loc }
     }
+
+    pub fn map<U, F>(self, f: F) -> Spanned<U>
+    where
+        F: FnOnce(T) -> U,
+    {
+        Spanned {
+            value: f(self.value),
+            loc: self.loc,
+        }
+    }
+
+
+    pub fn as_ref(&self) -> Spanned<&T> {
+        Spanned {
+            value: &self.value,
+            loc: self.loc,
+        }
+    }
+
+    pub fn and_then<U, F>(self, f: F) -> Spanned<U>
+    where
+        F: FnOnce(T) -> Spanned<U>,
+    {
+        f(self.value)
+    }
+
+    pub fn at(value: T, file_id: FileId, span: Span) -> Self {
+        Self {
+            value,
+            loc: Location::new(file_id, span),
+        }
+    }
+
 }
+
+pub trait ToSpanned: Sized {
+    fn spanned(self, loc: Location) -> Spanned<Self> {
+        Spanned::new(self, loc)
+    }
+
+    fn spanned_inherit<U>(self, other: &Spanned<U>) -> Spanned<Self> {
+        Spanned {
+            value: self,
+            loc: other.loc,
+        }
+    }
+
+    fn spanned_at(self, file_id: FileId, span: Span) -> Spanned<Self> {
+        Spanned::at(self, file_id, span)
+    }
+
+}
+
+impl<T> ToSpanned for T {}
 
 impl<T: Debug> Debug for Spanned<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

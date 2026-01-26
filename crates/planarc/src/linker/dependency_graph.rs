@@ -1,4 +1,4 @@
-use anyhow::{Context, Result, anyhow};
+use anyhow::{anyhow, Context, Result};
 use derive_more::Display;
 use miette::NamedSource;
 use petgraph::algo::{is_cyclic_directed, toposort};
@@ -13,6 +13,7 @@ use tracing::{debug, error, info, instrument, trace, trace_span, warn};
 use type_sitter::{HasChildren, Node};
 
 use crate::ast::Module;
+use crate::checked::Checked;
 use crate::linker::error::{CycleStep, GraphError};
 use crate::linker::meta::SymbolId;
 use crate::linker::symbol_table::SymbolTable;
@@ -111,6 +112,7 @@ impl<'a, L: ModuleLoader + Sync> GraphBuilder<'a, L> {
         let universe = self
             .discover_universe(roots)
             .map_err(|e| miette::miette!(e))?;
+
         let universe_vec: Vec<_> = universe.into_iter().collect();
 
         let results: Vec<Result<_>> = universe_vec
@@ -124,9 +126,10 @@ impl<'a, L: ModuleLoader + Sync> GraphBuilder<'a, L> {
                     .loader
                     .load(&discovered.path)
                     .map_err(|e| anyhow!(e))
-                    .and_then(|src| CompilationUnit::new(src))?;
+                    .and_then(CompilationUnit::new)?;
 
-                let (module_ast, errors) = lower_module(unit.tree, unit.source.clone(), file_id);
+                let (module_ast, errors) =
+                    lower_module(unit.tree, unit.source.clone(), file_id).into_parts();
 
                 Ok((fqmn, file_id, unit.source, module_ast, errors))
             })
@@ -293,8 +296,8 @@ impl<'a, L: ModuleLoader + Sync> GraphBuilder<'a, L> {
                     range.end_byte,
                     range.start_point.row + 1,
                     range.start_point.column + 1,
-                    range.end_point.row + 1,        
-                    range.end_point.column + 1,     
+                    range.end_point.row + 1,
+                    range.end_point.column + 1,
                 );
 
                 let loc = Location::new(file_id, span);
@@ -393,7 +396,7 @@ mod tests {
     use miette::miette;
     use std::{fs, sync::Once};
     use tempfile::tempdir;
-    use tracing_subscriber::{EnvFilter, fmt};
+    use tracing_subscriber::{fmt, EnvFilter};
 
     static INIT: Once = Once::new();
 

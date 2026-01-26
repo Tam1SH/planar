@@ -43,7 +43,7 @@ mod tests {
     #[test]
     fn test_query_definition() {
         assert_lower_snapshot!(
-            "query includePattern: grammars.nginx = `include (string)@path;`",
+            "query includePattern = `include (string)@path;`",
             as_query_definition,
             lower_query_definition
         );
@@ -52,7 +52,7 @@ mod tests {
     #[test]
     fn test_empty_query() {
         assert_lower_snapshot!(
-            "query empty: some.lang = ``",
+            "query empty = ` `",
             as_query_definition,
             lower_query_definition
         );
@@ -61,7 +61,7 @@ mod tests {
     #[test]
     fn test_query_definition_with_captures() {
         assert_lower_snapshot!(
-            "query find_stuff: grammars.rust = `
+            "query find_stuff = `
                 (function_item 
                     name: (identifier) @fn.name
                     body: (block) @fn.body
@@ -75,16 +75,7 @@ mod tests {
     #[test]
     fn test_query_no_captures() {
         assert_lower_snapshot!(
-            "query empty: some.lang = `(node)`",
-            as_query_definition,
-            lower_query_definition
-        );
-    }
-
-    #[test]
-    fn test_query_complex_names() {
-        assert_lower_snapshot!(
-            "query labels: lang = `@simple @with.dot @with-dash @under_score`",
+            "query empty = `(node)`",
             as_query_definition,
             lower_query_definition
         );

@@ -1,0 +1,58 @@
+---
+source: crates/planarc/src/linker/linker.rs
+expression: errors
+---
+[31mpdl::linker::symbol_collision[0m
+
+  [31m×[0m Symbol collision: 'main.SameName' is already defined
+   ╭─[[36;1;4m/memory/main.pdl:3:22[0m]
+ [2m2[0m │                 fact SameName {}
+ [2m3[0m │                 fact SameName {}
+   · [35;1m                     ────┬───[0m
+   ·                          [35;1m╰── [35;1mredefined here[0m[0m
+ [2m4[0m │                 fact BadFact { field: UnknownType }
+   ╰────
+
+Error: 
+  [31m×[0m Originally defined here
+   ╭─[[36;1;4m/memory/main.pdl:2:22[0m]
+ [2m1[0m │ 
+ [2m2[0m │                 fact SameName {}
+   · [35;1m                     ────┬───[0m
+   ·                          [35;1m╰── [35;1moriginal definition[0m[0m
+ [2m3[0m │                 fact SameName {}
+   ╰────
+
+[31mpdl::linker::unknown_symbol[0m
+
+  [31m×[0m Unknown symbol: 'UnknownType'
+   ╭─[[36;1;4m/memory/main.pdl:4:39[0m]
+ [2m3[0m │                 fact SameName {}
+ [2m4[0m │                 fact BadFact { field: UnknownType }
+   · [35;1m                                      ─────┬─────[0m
+   ·                                            [35;1m╰── [35;1mundeclared identifier[0m[0m
+ [2m5[0m │                 node N { match `q` { emit other.PrivateFact {} } }
+   ╰────
+
+[31mpdl::linker::unknown_symbol[0m
+
+  [31m×[0m Unknown symbol: 'UnknownType'
+   ╭─[[36;1;4m/memory/main.pdl:4:39[0m]
+ [2m3[0m │                 fact SameName {}
+ [2m4[0m │                 fact BadFact { field: UnknownType }
+   · [35;1m                                      ─────┬─────[0m
+   ·                                            [35;1m╰── [35;1mundeclared identifier[0m[0m
+ [2m5[0m │                 node N { match `q` { emit other.PrivateFact {} } }
+   ╰────
+
+[31mpdl::linker::access_violation[0m
+
+  [31m×[0m Access violation: symbol 'other.PrivateFact' is private to module 'other'
+   ╭─[[36;1;4m/memory/main.pdl:5:43[0m]
+ [2m4[0m │                 fact BadFact { field: UnknownType }
+ [2m5[0m │                 node N { match `q` { emit other.PrivateFact {} } }
+   · [35;1m                                          ────────┬────────[0m
+   ·                                                   [35;1m╰── [35;1maccess to this symbol is restricted[0m[0m
+ [2m6[0m │             
+   ╰────
+[36m  help: [0mThis symbol is private or internal. Use 'pub' to export it if needed.

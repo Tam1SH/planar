@@ -11,6 +11,7 @@ NodeDefinition {
                 query_ref: Identifier(
                     "includePattern",
                 ) @ Span { start: 30, end: 44, line: 1, col: 31, line_end: 0, col_end: 44 },
+                statements: [],
             } @ Span { start: 24, end: 48, line: 1, col: 25, line_end: 0, col_end: 48 },
         ) @ Span { start: 24, end: 48, line: 1, col: 25, line_end: 0, col_end: 48 },
     ],

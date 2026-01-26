@@ -1,0 +1,5 @@
+---
+source: crates/planarc/src/lowering/grammar.rs
+expression: ast
+---
+"grammars.rust" @ Span { start: 0, end: 19, line: 1, col: 1, line_end: 0, col_end: 19 }

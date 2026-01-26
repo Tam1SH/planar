@@ -110,8 +110,8 @@ export default grammar({
     emit: $ => seq(
       'emit',
       field('left_fact', $.emmited_fact),
-      $.relation,
-      field('right_fact', $.emmited_fact)  
+      optional($.relation),
+      optional(field('right_fact', $.emmited_fact))  
     ),
 
     emmited_fact: $ => seq(
@@ -129,14 +129,7 @@ export default grammar({
       $._newline
     ),
 
-    type_definition: $ => choice(
-      field('type', $.type_annotation),
-      seq(
-        '{',
-        repeat(choice($.type_field_definition, $._newline)),
-        '}'
-      )
-    ),
+    type_definition: $ => field('type', $.type_annotation),
 
 
     type_field_definition: $ => seq(

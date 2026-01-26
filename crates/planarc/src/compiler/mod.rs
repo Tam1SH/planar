@@ -7,25 +7,26 @@ use std::path::PathBuf;
 use thiserror::Error;
 use tracing::{debug, info, instrument, trace, warn};
 
-use crate::DynamicLanguageLoader;
 use crate::compiler::error::CompilersError;
 use crate::linker::dependency_graph::GraphBuilder;
 use crate::linker::error::{LinkerError, LinkerErrors};
 use crate::linker::linked_ast::LinkedModule;
-use crate::linker::linker::Linker;
+use crate::linker::linker;
 use crate::linker::symbol_table::SymbolTable;
 use crate::lowering::error::LoweringErrors;
 use crate::module_loader::{ModuleLoader, PackageRoot};
 use crate::source_registry::SourceRegistry;
+use crate::typechecker::TypeChecker;
+use crate::typechecker::typed_ast::TypedWorld;
 use crate::validator::error::ValidationErrors;
 use crate::validator::grammar_registry::GrammarRegistry;
 use crate::validator::query_validator::QueryValidator;
 use crate::validator::wit_validator::WitValidator;
+use crate::{DynamicLanguageLoader, typechecker};
 
 pub struct CompilationResult {
-    pub modules: BTreeMap<String, LinkedModule>,
+    pub typed_world: TypedWorld,
     pub registry: SourceRegistry,
-    pub symbol_table: SymbolTable,
     pub errors: CompilersError,
     pub grammars: GrammarRegistry,
 }
@@ -66,105 +67,72 @@ impl<L: ModuleLoader + Sync> Compiler<L> {
         roots: Vec<PackageRoot>,
         paths: BTreeMap<String, PathBuf>,
     ) -> miette::Result<CompilationResult> {
-        // 1. Discovery & Lowering
-        // debug!("Phase 1: Discovery. Scanning package roots and lowering AST...");
-        // let builder = GraphBuilder::new(&self.loader);
-        // let (lowered_graph, lowering_errors) = builder.build(&roots)?;
-        // trace!(errors = lowering_errors.0.len(), "Lowering finished");
+        // --- Phase 1: Lowering ---
+        debug!("Phase 1: Lowering AST...");
+        let builder = GraphBuilder::new(&self.loader);
+        let (lowered_graph, lowering_errors) = builder.build(&roots)?;
 
-        // // 2. Linking
-        // debug!("Phase 2: Linking definitions and symbols...");
-        // let mut linker = Linker::new(self.prelude.clone());
-        // let definition_errors = linker.collect_definitions(lowered_graph);
-        // debug!(
-        //     symbols = linker.table.symbols.len(),
-        //     "Symbol table populated"
-        // );
+        let registry = lowered_graph.registry.clone();
 
-        // let mut modules = BTreeMap::new();
-        // let mut linking_errors = LinkerErrors::new(vec![]);
+        // --- Phase 2: Linking ---
+        debug!("Phase 2: Linking pipeline...");
+        let (linked_world, linking_errors) =
+            linker::link_to_world(self.prelude.clone(), lowered_graph);
 
-        // for (fqmn, module_ast) in &lowered_graph.modules {
-        //     let _span = tracing::debug_span!("link_module", module = %fqmn).entered();
-        //     let (linked_mod, mod_errors) =
-        //         linker.link_module(fqmn, module_ast, &lowered_graph.registry);
-        //     linking_errors.0.extend(mod_errors);
-        //     modules.insert(fqmn.clone(), linked_mod);
-        // }
+        // --- Phase 3: Grammar Loading ---
+        debug!("Phase 3: Loading Grammars...");
+        let grammar_registry = GrammarRegistry::new_with_paths(
+            Box::new(crate::loader::DynamicLanguageLoader::default()),
+            paths,
+        );
 
-        // // 3. Grammar Loading
-        // debug!("Phase 3: Initializing Grammar Registry...");
-        // for (name, path) in &paths {
-        //     trace!(grammar = %name, path = ?path, "Registering grammar binary");
-        // }
+        // --- Phase 4: Validation (Queries) ---
+        debug!("Phase 4: Validating Tree-Sitter queries...");
+        let query_validator = QueryValidator {
+            registry: &registry,
+            grammars: &grammar_registry,
+        };
 
-        // let grammar_registry =
-        //     GrammarRegistry::new_with_paths(Box::new(DynamicLanguageLoader::default()), paths);
+        let mut validation_errors = Vec::new();
+        for (name, module) in &linked_world.modules {
+            let errs = query_validator.validate_module(module);
+            validation_errors.extend(errs.0);
+        }
 
-        // // 4 Validation
-        // debug!("Phase 4: Validation (Wit & Queries)...");
-        // let wit_validator = WitValidator {
-        //     table: &linker.table,
-        //     registry: &lowered_graph.registry,
-        // };
+        // --- Phase 5: Type Checking ---
+        debug!("Phase 5: Type Checking (Finalizing TypedWorld)...");
 
-        // let query_validator = QueryValidator {
-        //     registry: &lowered_graph.registry,
-        //     grammars: &grammar_registry,
-        // };
+        let (typed_world, type_errors) = typechecker::check_world(linked_world).into_parts();
 
-        // let mut validation_errors = Vec::new();
+        // --- Phase 6: Error Collection ---
+        let mut all_errors = CompilersError::default();
+        all_errors.absorb(lowering_errors);
+        all_errors.absorb(linking_errors);
+        all_errors.absorb(ValidationErrors::new(validation_errors));
+        all_errors.absorb(type_errors);
 
-        // for (fqmn, linked_mod) in &modules {
-        //     let _span = tracing::debug_span!("validate_module", module = %fqmn).entered();
+        if all_errors.is_empty() {
+            info!("Compilation successful");
+        } else {
+            warn!(
+                error_count = all_errors.len(),
+                "Compilation failed with errors"
+            );
+        }
 
-        //     let wit_errs = wit_validator.validate_module(linked_mod);
-        //     validation_errors.extend(wit_errs.0);
-
-        //     let query_errs = query_validator.validate_module(linked_mod);
-        //     validation_errors.extend(query_errs.0);
-        // }
-
-        // let validation_errors = ValidationErrors::new(validation_errors);
-
-        // // 5. Finalizing
-        // let mut all_errors = CompilersError::default();
-        // all_errors.absorb_all([
-        //     lowering_errors.into(),
-        //     definition_errors.into(),
-        //     linking_errors.into(),
-        //     validation_errors.into(),
-        // ]);
-
-        // if all_errors.is_empty() {
-        //     info!(
-        //         status = "success",
-        //         modules = modules.len(),
-        //         "Compilation finished successfully"
-        //     );
-        // } else {
-        //     warn!(
-        //         status = "failed",
-        //         error_count = all_errors.0.len(),
-        //         "Compilation finished with errors"
-        //     );
-        // }
-
-        // Ok(CompilationResult {
-        //     modules,
-        //     registry: lowered_graph.registry,
-        //     errors: all_errors,
-        //     symbol_table: linker.table,
-        //     grammars: grammar_registry,
-        // })
-        todo!()
+        Ok(CompilationResult {
+            typed_world,
+            registry,
+            errors: all_errors,
+            grammars: grammar_registry,
+        })
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::linker::meta::ResolvedId;
+    use crate::linker::meta::{ResolvedId, SymbolId};
     use crate::loader::MockLanguageLoader;
     use crate::module_loader::FsModuleLoader;
     use std::collections::HashMap;
@@ -226,7 +194,7 @@ mod tests {
         ]);
 
         assert!(!res.has_errors());
-        assert!(res.modules.contains_key("A.main"));
+        assert!(res.typed_world.modules.contains_key("A.main"));
     }
 
     #[test]
@@ -241,13 +209,10 @@ mod tests {
 
         assert!(!res.has_errors());
 
-        let main = &res.modules["app.main"];
+        let main = &res.typed_world.modules["app.main"];
         let fact = &main.facts[0].value;
-        if let ResolvedId::Global(id) = &fact.fields[0].value.ty.symbol.value {
-            let util = &res.modules["pkg.util"];
-            assert_eq!(id.value, util.types[0].value.id);
-        } else {
-            panic!("Symbol not resolved");
-        }
+        let id = fact.fields[0].value.ty.symbol.value;
+        let util = &res.typed_world.modules["pkg.util"];
+        assert_eq!(id, util.types[0].value.id);
     }
 }

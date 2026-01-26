@@ -1,10 +1,10 @@
 pub mod dependency_graph;
 pub mod error;
-pub mod meta;
 pub mod linked_ast;
+pub mod linked_world;
 pub mod linker;
 pub mod lookup;
-pub mod match_linker;
-pub mod resolver;
+pub mod meta;
+pub mod node_linker;
+pub mod ast_linker;
 pub mod symbol_table;
-pub mod linked_world;

@@ -53,30 +53,30 @@ fn lower_type_definition<'a>(
     ctx: &Ctx,
     node: pdl::TypeDefinition<'a>,
 ) -> NodeResult<'a, Spanned<TypeDefinition>> {
-    let base_type = if let Some(ty_node_res) = node.r#type() {
-        Some(lower_type_annotation(ctx, ty_node_res?)?)
+    let base_type = if let Ok(ty_node_res) = node.r#type() {
+        Some(lower_type_annotation(ctx, ty_node_res)?)
     } else {
         None
     };
 
-    let mut fields = Vec::new();
-    let mut field_cursor = node.walk();
-    for field_res in node.type_field_definitions(&mut field_cursor) {
-        fields.push(lower_type_field_definition(ctx, field_res?)?);
-    }
+    // let mut fields = Vec::new();
+    // let mut field_cursor = node.walk();
+    // for field_res in node.type_field_definitions(&mut field_cursor) {
+    //     fields.push(lower_type_field_definition(ctx, field_res?)?);
+    // }
 
-    Ok(ctx.spanned(&node, TypeDefinition { base_type, fields }))
+    Ok(ctx.spanned(&node, TypeDefinition { base_type }))
 }
 
-fn lower_type_field_definition<'a>(
-    ctx: &Ctx,
-    node: pdl::TypeFieldDefinition<'a>,
-) -> NodeResult<'a, Spanned<TypeField>> {
-    let name = ctx.spanned(&node.name()?, ctx.text(&node.name()?));
-    let definition = lower_type_definition(ctx, node.r#type()?)?;
+// fn lower_type_field_definition<'a>(
+//     ctx: &Ctx,
+//     node: pdl::TypeFieldDefinition<'a>,
+// ) -> NodeResult<'a, Spanned<TypeField>> {
+//     let name = ctx.spanned(&node.name()?, ctx.text(&node.name()?));
+//     let definition = lower_type_definition(ctx, node.r#type()?)?;
 
-    Ok(ctx.spanned(&node, TypeField { name, definition }))
-}
+//     Ok(ctx.spanned(&node, TypeField { name, definition }))
+// }
 
 pub fn lower_type_annotation<'a>(
     ctx: &Ctx,

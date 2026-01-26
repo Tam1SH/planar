@@ -5,6 +5,8 @@ expression: ast
 QueryDefinition {
     vis: Private,
     name: "includePattern" @ Span { start: 6, end: 20, line: 1, col: 7, line_end: 0, col_end: 20 },
-    grammar: "grammars.nginx" @ Span { start: 22, end: 36, line: 1, col: 23, line_end: 0, col_end: 36 },
-    value: "include (string)@path;" @ Span { start: 39, end: 63, line: 1, col: 40, line_end: 0, col_end: 63 },
-} @ Span { start: 0, end: 63, line: 1, col: 1, line_end: 0, col_end: 63 }
+    value: "include (string)@path;" @ Span { start: 24, end: 46, line: 1, col: 25, line_end: 0, col_end: 46 },
+    captures: [
+        "@path" @ Span { start: 40, end: 45, line: 1, col: 41, line_end: 1, col_end: 46 },
+    ],
+} @ Span { start: 0, end: 47, line: 1, col: 1, line_end: 0, col_end: 47 }

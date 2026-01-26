@@ -1,0 +1,28 @@
+{
+    "cmake.ignoreCMakeListsMissing": true,
+
+    "rust-analyzer.check.command": "clippy",
+    "rust-analyzer.diagnostics.enable": true,
+    "rust-analyzer.completion.autoimport.enable": true,
+    "rust-analyzer.completion.postfix.enable": true,
+
+    "rust-analyzer.imports.granularity.group": "module", 
+    "rust-analyzer.imports.granularity.enforce": true,
+    "rust-analyzer.imports.merge.glob": true, 
+    "rust-analyzer.imports.prefix": "self",
+
+    "rust-analyzer.rustfmt.extraArgs": ["+nightly", "--unstable-features"],
+
+    "editor.folding": true,
+    "editor.foldingStrategy": "indentation",
+    "editor.showFoldingControls": "mouseover",
+
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit",
+            "source.fixAll.clippy": "explicit"
+        }
+    }
+}

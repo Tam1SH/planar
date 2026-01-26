@@ -16,14 +16,11 @@ TypeDeclaration {
                             "\"root\"",
                         ) @ Span { start: 24, end: 30, line: 1, col: 25, line_end: 0, col_end: 30 },
                         op: "/" @ Span { start: 31, end: 32, line: 1, col: 32, line_end: 0, col_end: 32 },
-                        right: Identifier(
-                            "it",
-                        ) @ Span { start: 33, end: 35, line: 1, col: 34, line_end: 0, col_end: 35 },
+                        right: It @ Span { start: 33, end: 35, line: 1, col: 34, line_end: 0, col_end: 35 },
                     } @ Span { start: 24, end: 35, line: 1, col: 25, line_end: 0, col_end: 35 },
                 ),
                 args: [],
             },
         ),
-        fields: [],
     } @ Span { start: 14, end: 35, line: 1, col: 15, line_end: 0, col_end: 35 },
 } @ Span { start: 0, end: 35, line: 1, col: 1, line_end: 0, col_end: 35 }

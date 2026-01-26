@@ -50,7 +50,7 @@ SymbolTable {
             },
             location: Location {
                 file_id: FileId(
-                    0,
+                    18446744073709551615,
                 ),
                 span: Span {
                     start: 0,
@@ -79,7 +79,7 @@ SymbolTable {
             },
             location: Location {
                 file_id: FileId(
-                    0,
+                    18446744073709551615,
                 ),
                 span: Span {
                     start: 0,
@@ -108,7 +108,7 @@ SymbolTable {
             },
             location: Location {
                 file_id: FileId(
-                    0,
+                    18446744073709551615,
                 ),
                 span: Span {
                     start: 0,
@@ -137,7 +137,7 @@ SymbolTable {
             },
             location: Location {
                 file_id: FileId(
-                    0,
+                    18446744073709551615,
                 ),
                 span: Span {
                     start: 0,
@@ -166,7 +166,7 @@ SymbolTable {
             },
             location: Location {
                 file_id: FileId(
-                    0,
+                    18446744073709551615,
                 ),
                 span: Span {
                     start: 0,
